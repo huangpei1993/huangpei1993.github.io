@@ -191,11 +191,20 @@ setTimeout(() => {
     }
 }, 60*1000);
 
-//黑夜模式判断
-if (localStorage.getItem('isDark') === '1') {
+now = new Date()
+if ((now.getHours() >= 19 || now.getHours() < 7) && !$('body').hasClass('DarkMode')) {
     document.body.classList.add('DarkMode');
-    $('#sum-moon-icon').addClass("fa-sun").removeClass('fa-moon')
-} else {
+    $('#sum-moon-icon').addClass("fa-sun").removeClass('fa-moon');
+}else if((now < 19 || now.getHours() >= 7) && $('body').hasClass('DarkMode')){
     document.body.classList.remove('DarkMode');
     $('#sum-moon-icon').removeClass("fa-sun").addClass('fa-moon')
 }
+
+//黑夜模式判断
+// if (localStorage.getItem('isDark') === '1') {
+//     document.body.classList.add('DarkMode');
+//     $('#sum-moon-icon').addClass("fa-sun").removeClass('fa-moon')
+// } else {
+//     document.body.classList.remove('DarkMode');
+//     $('#sum-moon-icon').removeClass("fa-sun").addClass('fa-moon')
+// }

@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>Tensorflow踩坑记</title>
+      <link href="/2022/11/15/tensorflow-cai-keng-ji/"/>
+      <url>/2022/11/15/tensorflow-cai-keng-ji/</url>
+      
+        <content type="html"><![CDATA[<h2 id="2022-11-15"><a href="#2022-11-15" class="headerlink" title="2022-11-15"></a>2022-11-15</h2><h3 id="1-Windows下出现-Multiprocessing-error-without-if-clause-protection"><a href="#1-Windows下出现-Multiprocessing-error-without-if-clause-protection" class="headerlink" title="1. Windows下出现 Multiprocessing error without if-clause protection"></a>1. Windows下出现 Multiprocessing error without if-clause protection</h3><h4 id="该问题是怎么引起的？"><a href="#该问题是怎么引起的？" class="headerlink" title="该问题是怎么引起的？"></a>该问题是怎么引起的？</h4><p>在Windows操作系统下测试Keras <a href="https://keras.io/examples/nlp/question_answering/">Question Answering with Hugging Face Transformers</a>的时候，在运行如下代码时程序无法继续运行</p><pre class="line-numbers language-python" data-language="python"><code class="language-python">tokenized_datasets <span class="token operator">=</span> datasets<span class="token punctuation">.</span><span class="token builtin">map</span><span class="token punctuation">(</span>    prepare_train_features<span class="token punctuation">,</span>    batched<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span>    remove_columns<span class="token operator">=</span>datasets<span class="token punctuation">[</span><span class="token string">"train"</span><span class="token punctuation">]</span><span class="token punctuation">.</span>column_names<span class="token punctuation">,</span>    num_proc<span class="token operator">=</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><h4 id="报错信息"><a href="#报错信息" class="headerlink" title="报错信息"></a>报错信息</h4><p>通过查看VSCode的OUTPUT输出信息后，出现如下报错信息</p><pre class="line-numbers language-none"><code class="language-none">RuntimeError:       An attempt has been made to start a new process before the       current process has finished its bootstrapping phase.   This probably means that you are not using fork to start your   child processes and you have forgotten to use the proper idiom   in the main module:       if __name__ == '__main__':           freeze_support()           ...   The "freeze_support()" line can be omitted if the program   is not going to be frozen to produce an executable.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><h4 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h4><p>该问题和Windows下multiprocessing的实现有关，根据这篇<a href="https://pytorch.org/docs/stable/notes/windows.html#multiprocessing-error-without-if-clause-protection">文档</a>，我们需要将包含<br><code>tokenized_datasets = datasets.map(     prepare_train_features,     batched=True,     remove_columns=datasets["train"].column_names,     num_proc=3, )</code><br>的代码封装成一个函数，具体如下</p><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>    <span class="token comment">#前面的代码</span>    tokenized_datasets <span class="token operator">=</span> datasets<span class="token punctuation">.</span><span class="token builtin">map</span><span class="token punctuation">(</span>        prepare_train_features<span class="token punctuation">,</span>        batched<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span>        remove_columns<span class="token operator">=</span>datasets<span class="token punctuation">[</span><span class="token string">"train"</span><span class="token punctuation">]</span><span class="token punctuation">.</span>column_names<span class="token punctuation">,</span>        num_proc<span class="token operator">=</span><span class="token number">3</span><span class="token punctuation">,</span>    <span class="token punctuation">)</span>    <span class="token comment">#后面的代码</span><span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>    main<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> Tensorflow </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Tensorflow </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Windows下使用 Hexo+GitHub 搭建个人免费博客教程</title>
       <link href="/2022/11/09/shi-yong-hexoandgithub-da-jian-ge-ren-mian-fei-bo-ke-jiao-cheng/"/>
       <url>/2022/11/09/shi-yong-hexoandgithub-da-jian-ge-ren-mian-fei-bo-ke-jiao-cheng/</url>
