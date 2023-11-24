@@ -4,9 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="感兴趣的问题, HuangPei&#39;s Blog">
-    <meta name="description" content="随机树与随机森林正则表达式正则表达式提取某两个字符串或者字符之间的字符串(https://blog.csdn.net/qq_27632921/article/details/98200792)
-定义实现最短匹配的正则表达式https://z">
+    <meta name="keywords" content="用docker在服务器上部署sharelatex, HuangPei&#39;s Blog">
+    <meta name="description" content="重新打包sharelatex的docker镜像参考官方给出的docker-compose.yaml文件。但是直接docker-compose，并不能排版中文，原因是缺少xelatex相关包。但在docker容器中，安装包并不方便。这里直接以">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -18,7 +17,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>感兴趣的问题 | HuangPei&#39;s Blog</title>
+    <title>用docker在服务器上部署sharelatex | HuangPei&#39;s Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
     
 
@@ -335,12 +334,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/8.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/21.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">感兴趣的问题</h1>
+                    <h1 class="description center-align post-title">用docker在服务器上部署sharelatex</h1>
                 </div>
             </div>
         </div>
@@ -376,28 +375,28 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2023-09-13
+                    2023-11-15
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2023-10-21
+                    2023-11-24
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    366
+                    831
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    1 分
+                    4 分
                 </div>
                 
 
@@ -420,29 +419,182 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="随机树与随机森林"><a href="#随机树与随机森林" class="headerlink" title="随机树与随机森林"></a>随机树与随机森林</h1><h1 id="正则表达式"><a href="#正则表达式" class="headerlink" title="正则表达式"></a>正则表达式</h1><h2 id="正则表达式提取某两个字符串或者字符之间的字符串"><a href="#正则表达式提取某两个字符串或者字符之间的字符串" class="headerlink" title="正则表达式提取某两个字符串或者字符之间的字符串"></a>正则表达式提取某两个字符串或者字符之间的字符串</h2><p>(<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_27632921/article/details/98200792">https://blog.csdn.net/qq_27632921/article/details/98200792</a>)</p>
-<h2 id="定义实现最短匹配的正则表达式"><a href="#定义实现最短匹配的正则表达式" class="headerlink" title="定义实现最短匹配的正则表达式"></a>定义实现最短匹配的正则表达式</h2><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/69815738">https://zhuanlan.zhihu.com/p/69815738</a></p>
-<h1 id="并查集"><a href="#并查集" class="headerlink" title="并查集"></a>并查集</h1><p>参考<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/93647900">算法学习笔记(1) : 并查集</a><br>并查集被很多OIer认为是最简洁而优雅的数据结构之一，主要用于解决一些元素分组的问题。它管理一系列不相交的集合，并支持两种操作：</p>
-<ul>
-<li>合并（Union）：把两个不相交的集合合并为一个集合。</li>
-<li>查询（Find）：查询两个元素是否在同一个集合中。<br>最直接的一个应用场景：<strong>亲戚问题</strong>。<br>##并查集的引入<br>并查集的重要思想在于，用集合中的一个元素代表集合。我曾看过一个有趣的比喻，把集合比喻成帮派，而代表元素则是帮主。接下来我们利用这个比喻，看看并查集是如何运作的。这一点类似数学说的<strong>等价类</strong><br>以下是并查集的Python代码模板<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">UnionFindSet</span>
-    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span>n<span class="token punctuation">:</span><span class="token builtin">int</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-        self<span class="token punctuation">.</span>parents <span class="token operator">=</span> <span class="token punctuation">[</span>i <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span><span class="token punctuation">]</span>
-        
+                <h1 id="重新打包sharelatex的docker镜像"><a href="#重新打包sharelatex的docker镜像" class="headerlink" title="重新打包sharelatex的docker镜像"></a>重新打包sharelatex的docker镜像</h1><p>参考官方给出的docker-compose.yaml文件。但是直接docker-compose，并不能排版中文，原因是缺少xelatex相关包。但在docker容器中，安装包并不方便。这里直接以原始sharelatex的docker镜像为基础生成新的docker镜像。</p>
+<p>在新的docker镜像中会安装texlive的更新，并且将xelatex相关包添加到环境变量中去。对应的Dockerfile：</p>
+<pre class="line-numbers language-none"><code class="language-none">FROM sharelatex/sharelatex
+RUN tlmgr option repository https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet
+RUN tlmgr update --self --all
+RUN tlmgr install scheme-full
+RUN echo '$#! /bin/bash\npushd /usr/local/bin\nfor f in `ls /usr/local/texlive/2023/bin/x86_64-linux`\ndo\n[ -f $f ] || ln -s /usr/local/texlive/2023/bin/x86_64-linux/$f $f\ndone' &gt; /overleaf/link.sh
+RUN cat /overleaf/link.sh
+RUN chmod +x /overleaf/link.sh
+RUN bash /overleaf/link.sh
+WORKDIR /
+ENTRYPOINT ["/sbin/my_init"]<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>在保存Dockerfile的文件夹下，运行docker build生成新的docker镜像：</p>
+<pre class="line-numbers language-none"><code class="language-none">build --tag chinglin/sharelatex:latest --progress=plain . 2&gt;&amp;1 | tee build.log<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h1 id="docker-compose运行"><a href="#docker-compose运行" class="headerlink" title="docker compose运行"></a>docker compose运行</h1><p>修改官方的docker-compose.yml文件后的文件如下：</p>
+<pre class="line-numbers language-none"><code class="language-none">version: '2.2'
+services:
+    sharelatex:
+        restart: always
+        # Server Pro users:
+        # image: quay.io/sharelatex/sharelatex-pro
+        image: hp/sharelatex
+        container_name: sharelatex
+        depends_on:
+            mongo:
+                condition: service_healthy
+            redis:
+                condition: service_started
+        ports:
+            - 2080:80
+        links:
+            - mongo
+            - redis
+        stop_grace_period: 60s
+        volumes:
+            - ./sharelatex/sharelatex_data:/var/lib/sharelatex
+            ########################################################################
+            ####  Server Pro: Uncomment the following line to mount the docker  ####
+            ####             socket, required for Sibling Containers to work    ####
+            ########################################################################
+            # - /var/run/docker.sock:/var/run/docker.sock
+        environment:
 
-    <span class="token keyword">def</span> <span class="token function">find</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span>x<span class="token punctuation">:</span><span class="token builtin">int</span><span class="token punctuation">)</span><span class="token operator">-</span><span class="token operator">&gt;</span><span class="token builtin">int</span><span class="token punctuation">:</span>
-        <span class="token keyword">if</span> self<span class="token punctuation">.</span>parents<span class="token punctuation">[</span>x<span class="token punctuation">]</span><span class="token operator">==</span>x<span class="token punctuation">:</span>
-            <span class="token keyword">return</span> x
-        <span class="token keyword">else</span><span class="token punctuation">:</span>
-            <span class="token comment"># 压缩路径，使得查找效率更高 </span>
-            <span class="token comment"># self.parents[x] = find(self.parents[x])</span>
-            <span class="token keyword">return</span> self<span class="token punctuation">.</span>find<span class="token punctuation">(</span>self<span class="token punctuation">.</span>parents<span class="token punctuation">[</span>x<span class="token punctuation">]</span><span class="token punctuation">)</span> 
+            SHARELATEX_APP_NAME: Overleaf Community Edition
 
-    <span class="token keyword">def</span> <span class="token function">union</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span>x<span class="token punctuation">:</span><span class="token builtin">int</span><span class="token punctuation">,</span>y<span class="token punctuation">:</span><span class="token builtin">int</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-        rx <span class="token operator">=</span> self<span class="token punctuation">.</span>find<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
-        ry <span class="token operator">=</span> self<span class="token punctuation">.</span>find<span class="token punctuation">(</span>y<span class="token punctuation">)</span>
-        <span class="token keyword">if</span> rx <span class="token operator">!=</span> ry<span class="token punctuation">:</span>
-            self<span class="token punctuation">.</span>parents<span class="token punctuation">[</span>rx<span class="token punctuation">]</span> <span class="token operator">=</span> ry<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+            SHARELATEX_MONGO_URL: mongodb://mongo/sharelatex
+
+            # Same property, unfortunately with different names in
+            # different locations
+            SHARELATEX_REDIS_HOST: redis
+            REDIS_HOST: redis
+
+            ENABLED_LINKED_FILE_TYPES: 'project_file,project_output_file'
+
+            # Enables Thumbnail generation using ImageMagick
+            ENABLE_CONVERSIONS: 'true'
+
+            # Disables email confirmation requirement
+            EMAIL_CONFIRMATION_DISABLED: 'true'
+
+            # temporary fix for LuaLaTex compiles
+            # see https://github.com/overleaf/overleaf/issues/695
+            TEXMFVAR: /var/lib/sharelatex/tmp/texmf-var
+
+            ## Set for SSL via nginx-proxy
+            #VIRTUAL_HOST: 103.112.212.22
+
+            # SHARELATEX_SITE_URL: http://sharelatex.mydomain.com
+            # SHARELATEX_NAV_TITLE: Our ShareLaTeX Instance
+            # SHARELATEX_HEADER_IMAGE_URL: http://somewhere.com/mylogo.png
+            # SHARELATEX_ADMIN_EMAIL: support@it.com
+
+            # SHARELATEX_LEFT_FOOTER: '[{"text": "Powered by &lt;a href=\"https://www.sharelatex.com\"&gt;ShareLaTeX&lt;/a&gt; 2016"},{"text": "Another page I want to link to can be found &lt;a href=\"here\"&gt;here&lt;/a&gt;"} ]'
+            # SHARELATEX_RIGHT_FOOTER: '[{"text": "Hello I am on the Right"} ]'
+
+            # SHARELATEX_EMAIL_FROM_ADDRESS: "team@sharelatex.com"
+
+            # SHARELATEX_EMAIL_AWS_SES_ACCESS_KEY_ID:
+            # SHARELATEX_EMAIL_AWS_SES_SECRET_KEY:
+
+            # SHARELATEX_EMAIL_SMTP_HOST: smtp.mydomain.com
+            # SHARELATEX_EMAIL_SMTP_PORT: 587
+            # SHARELATEX_EMAIL_SMTP_SECURE: false
+            # SHARELATEX_EMAIL_SMTP_USER:
+            # SHARELATEX_EMAIL_SMTP_PASS:
+            # SHARELATEX_EMAIL_SMTP_TLS_REJECT_UNAUTH: true
+            # SHARELATEX_EMAIL_SMTP_IGNORE_TLS: false
+            # SHARELATEX_EMAIL_SMTP_NAME: '127.0.0.1'
+            # SHARELATEX_EMAIL_SMTP_LOGGER: true
+            # SHARELATEX_CUSTOM_EMAIL_FOOTER: "This system is run by department x"
+
+            # ENABLE_CRON_RESOURCE_DELETION: true
+
+            ################
+            ## Server Pro ##
+            ################
+
+            # SANDBOXED_COMPILES: 'true'
+
+            # SANDBOXED_COMPILES_SIBLING_CONTAINERS: 'true'
+            # SANDBOXED_COMPILES_HOST_DIR: '/var/sharelatex_data/data/compiles'
+
+            # DOCKER_RUNNER: 'false'
+
+            ## Works with test LDAP server shown at bottom of docker compose
+            # SHARELATEX_LDAP_URL: 'ldap://ldap:389'
+            # SHARELATEX_LDAP_SEARCH_BASE: 'ou=people,dc=planetexpress,dc=com'
+            # SHARELATEX_LDAP_SEARCH_FILTER: '(uid={{username}})'
+            # SHARELATEX_LDAP_BIND_DN: 'cn=admin,dc=planetexpress,dc=com'
+            # SHARELATEX_LDAP_BIND_CREDENTIALS: 'GoodNewsEveryone'
+            # SHARELATEX_LDAP_EMAIL_ATT: 'mail'
+            # SHARELATEX_LDAP_NAME_ATT: 'cn'
+            # SHARELATEX_LDAP_LAST_NAME_ATT: 'sn'
+            # SHARELATEX_LDAP_UPDATE_USER_DETAILS_ON_LOGIN: 'true'
+
+            # SHARELATEX_TEMPLATES_USER_ID: "578773160210479700917ee5"
+            # SHARELATEX_NEW_PROJECT_TEMPLATE_LINKS: '[ {"name":"All Templates","url":"/templates/all"}]'
+
+
+            # SHARELATEX_PROXY_LEARN: "true"
+
+    mongo:
+        restart: always
+        image: mongo:4.4
+        container_name: mongo
+        expose:
+            - 27017
+        volumes:
+            - ./mongo/mongo_data:/data/db
+        healthcheck:
+            test: echo 'db.stats().ok' | mongo localhost:27017/test --quiet
+            interval: 10s
+            timeout: 10s
+            retries: 5
+
+    redis:
+        restart: always
+        image: redis:6.2
+        container_name: redis
+        expose:
+            - 6379
+        volumes:
+            - ./redis/redis_data:/data
+
+    # ldap:
+    #    restart: always
+    #    image: rroemhild/test-openldap
+    #    container_name: ldap
+    #    expose:
+    #        - 389
+
+    # See https://github.com/jwilder/nginx-proxy for documentation on how to configure the nginx-proxy container,
+    # and https://github.com/overleaf/overleaf/wiki/HTTPS-reverse-proxy-using-Nginx for an example of some recommended
+    # settings. We recommend using a properly managed nginx instance outside of the Overleaf Server Pro setup,
+    # but the example here can be used if you'd prefer to run everything with docker-compose
+
+    # nginx-proxy:
+    #     image: jwilder/nginx-proxy
+    #     container_name: nginx-proxy
+    #     ports:
+    #       #- "80:80"
+    #       - "443:443"
+    #     volumes:
+    #       - /var/run/docker.sock:/tmp/docker.sock:ro
+    #       - /home/sharelatex/tmp:/etc/nginx/certs<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="Mongdb报错问题"><a href="#Mongdb报错问题" class="headerlink" title="Mongdb报错问题"></a>Mongdb报错问题</h2><p>参考 <a target="_blank" rel="noopener" href="https://github.com/overleaf/overleaf/wiki/Release-Notes--4.x.x">https://github.com/overleaf/overleaf/wiki/Release-Notes--4.x.x</a></p>
+<h3 id="Manually-setting-up-MongoDB-as-a-replica-set"><a href="#Manually-setting-up-MongoDB-as-a-replica-set" class="headerlink" title="Manually setting up MongoDB as a replica set"></a>Manually setting up MongoDB as a replica set</h3><p>The following instructions are not necessary if you use the Overleaf Toolkit or if you use an external Mongo database already configured as a replica set.</p>
+<p>If you run MongoDB with docker-compose, add the following command to the mongo container configuration:</p>
+<pre class="line-numbers language-none"><code class="language-none">mongo:
+    command: "--replSet overleaf"<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>Restart the mongo container then start a mongo shell with docker-compose exec -it mongo mongo. In that shell, run the following command to initiate the replica set:</p>
+<pre class="line-numbers language-none"><code class="language-none">rs.initiate({ _id: "overleaf", members: [ { _id: 0, host: "mongo:27017" } ] })<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/367416542">https://zhuanlan.zhihu.com/p/367416542</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/overleaf/overleaf/blob/main/docker-compose.yml">https://github.com/overleaf/overleaf/blob/main/docker-compose.yml</a></li>
 </ul>
 
                 
@@ -470,7 +622,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://huangpei1993.github.io/2023/09/13/gan-xing-qu-de-wen-ti/">https://huangpei1993.github.io/2023/09/13/gan-xing-qu-de-wen-ti/</a>
+                    <a href="https://huangpei1993.github.io/2023/11/15/yong-docker-zai-fu-wu-qi-shang-bu-shu-sharelatex/">https://huangpei1993.github.io/2023/11/15/yong-docker-zai-fu-wu-qi-shang-bu-shu-sharelatex/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -548,9 +700,10 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2023/11/15/yong-docker-zai-fu-wu-qi-shang-bu-shu-sharelatex/">
                     <div class="card-image">
@@ -568,9 +721,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2023-11-15
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-11-15
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -579,6 +732,7 @@
                         </span>
                     </div>
                 </div>
+
                 
             </div>
         </div>
@@ -589,13 +743,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2023/09/13/jue-ce-shu-yu-sui-ji-sen-lin/">
+                <a href="/2023/09/13/gan-xing-qu-de-wen-ti/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="决策树与随机森林">
+                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="感兴趣的问题">
                         
-                        <span class="card-title">决策树与随机森林</span>
+                        <span class="card-title">感兴趣的问题</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
