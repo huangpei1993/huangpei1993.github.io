@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>《动手学深度学习-PyTorch版》读书笔记</title>
+      <link href="/2024/03/14/dong-shou-xue-shen-du-xue-xi-pytorch-ban-du-shu-bi-ji/"/>
+      <url>/2024/03/14/dong-shou-xue-shen-du-xue-xi-pytorch-ban-du-shu-bi-ji/</url>
+      
+        <content type="html"><![CDATA[<h2 id="第十三章-计算机视觉"><a href="#第十三章-计算机视觉" class="headerlink" title="第十三章 计算机视觉"></a>第十三章 计算机视觉</h2><h3 id="13-8-区域卷积神经网络-R-CNN-系列"><a href="#13-8-区域卷积神经网络-R-CNN-系列" class="headerlink" title="13.8 区域卷积神经网络(R-CNN)系列"></a>13.8 区域卷积神经网络(R-CNN)系列</h3><h4 id="R-CNN的基本原理"><a href="#R-CNN的基本原理" class="headerlink" title="R-CNN的基本原理"></a>R-CNN的基本原理</h4><h4 id="R-CNN的具体步骤"><a href="#R-CNN的具体步骤" class="headerlink" title="R-CNN的具体步骤"></a>R-CNN的具体步骤</h4><h4 id="Fast-R-CNN的兴趣区域汇聚层-RoI-Pooling"><a href="#Fast-R-CNN的兴趣区域汇聚层-RoI-Pooling" class="headerlink" title="Fast R-CNN的兴趣区域汇聚层(RoI Pooling)"></a>Fast R-CNN的兴趣区域汇聚层(RoI Pooling)</h4><h3 id="13-10-转置卷积"><a href="#13-10-转置卷积" class="headerlink" title="13.10 转置卷积"></a>13.10 转置卷积</h3><h4 id="转置卷积的作用"><a href="#转置卷积的作用" class="headerlink" title="转置卷积的作用"></a>转置卷积的作用</h4><p>转置卷积用于逆转下采样导致的空间维度减小</p><h4 id="用什么方法初始化转置卷积层"><a href="#用什么方法初始化转置卷积层" class="headerlink" title="用什么方法初始化转置卷积层"></a>用什么方法初始化转置卷积层</h4><p>双线性插值</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 读书笔记 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> PyTorch </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>用docker在服务器上部署sharelatex</title>
       <link href="/2023/11/15/yong-docker-zai-fu-wu-qi-shang-bu-shu-sharelatex/"/>
       <url>/2023/11/15/yong-docker-zai-fu-wu-qi-shang-bu-shu-sharelatex/</url>
