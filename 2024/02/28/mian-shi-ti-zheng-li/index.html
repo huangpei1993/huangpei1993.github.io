@@ -511,21 +511,21 @@ mjx-container[display="true"] + br {
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2024-03-17
+                    2024-03-18
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    5.5k
+                    5.6k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    19 分
+                    20 分
                 </div>
                 
 
@@ -862,7 +862,16 @@ mjx-container[display="true"] + br {
 <li>网格效应（The Gridding Effect）<br>因为有空洞，所以会损失掉像素之间的连续性信息，对像素级的预测任务不友好</li>
 <li>长距离的信息可能是不相关的<br>用大的空洞卷积有利于大尺寸物体检测，而不利于小物体检测</li>
 </ol>
-<h3 id="说一说什么是转置卷积"><a href="#说一说什么是转置卷积" class="headerlink" title="说一说什么是转置卷积"></a>说一说什么是转置卷积</h3><h2 id="自然语言处理"><a href="#自然语言处理" class="headerlink" title="自然语言处理"></a>自然语言处理</h2><h3 id="RNN-中为什么要采用-tanh，而不是-ReLU-作为激活函数？"><a href="#RNN-中为什么要采用-tanh，而不是-ReLU-作为激活函数？" class="headerlink" title="RNN 中为什么要采用 tanh，而不是 ReLU 作为激活函数？"></a>RNN 中为什么要采用 tanh，而不是 ReLU 作为激活函数？</h3><ul>
+<h3 id="说一说什么是转置卷积"><a href="#说一说什么是转置卷积" class="headerlink" title="说一说什么是转置卷积"></a>说一说什么是转置卷积</h3><p>转置卷积可以用来逆转下采样导致的空间维度减小，从而恢复到原图大小。<br>其代码如下：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">trans_conv</span><span class="token punctuation">(</span>X<span class="token punctuation">,</span>K<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    h<span class="token punctuation">,</span>w <span class="token operator">=</span> K<span class="token punctuation">.</span>shape
+    Y <span class="token operator">=</span> torch<span class="token punctuation">.</span>zeros<span class="token punctuation">(</span><span class="token punctuation">(</span>X<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token operator">+</span>h<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">,</span>X<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token operator">+</span>w<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>X<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+      <span class="token keyword">for</span> j <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>X<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        Y<span class="token punctuation">[</span>i<span class="token punctuation">:</span>i<span class="token operator">+</span>h<span class="token punctuation">,</span>j<span class="token punctuation">:</span>j<span class="token operator">+</span>w<span class="token punctuation">]</span><span class="token operator">+=</span>X<span class="token punctuation">[</span>i<span class="token punctuation">,</span>j<span class="token punctuation">]</span><span class="token operator">*</span>K
+    <span class="token keyword">return</span> Y<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="自然语言处理"><a href="#自然语言处理" class="headerlink" title="自然语言处理"></a>自然语言处理</h2><h3 id="RNN-中为什么要采用-tanh，而不是-ReLU-作为激活函数？"><a href="#RNN-中为什么要采用-tanh，而不是-ReLU-作为激活函数？" class="headerlink" title="RNN 中为什么要采用 tanh，而不是 ReLU 作为激活函数？"></a>RNN 中为什么要采用 tanh，而不是 ReLU 作为激活函数？</h3><ul>
 <li>首先，是可以使用 ReLU 作为激活函数的，并且在序列较短、网络较浅时 ReLU 表现优于 tanh，但是当序列变长、网络加深后，效果就比 tanh 差；</li>
 <li>因为 ReLU 的输出可能大于 1，当序列过长时，会累计相乘多个大于 1 的数，最后输出可能会造成梯度爆炸，但是使用 tanh 激活函数，能够将输出值限制在-1 和 1 之间。</li>
 </ul>
