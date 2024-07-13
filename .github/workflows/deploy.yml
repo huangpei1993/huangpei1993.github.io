@@ -3,7 +3,7 @@ name: Hexo Deploy
 on:
   push:
     branches:
-      - deploy
+      - master
     paths:
       - '*.json'
       - '**.yml'
