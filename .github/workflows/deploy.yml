@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     if: github.event.repository.owner.id == github.event.sender.id
 
     steps:
@@ -21,10 +21,20 @@ jobs:
           ref: deploy
 
       - name: Setup Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
+      
+      - name: Cache node_modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        
         with:
-          node-version: "12"
-
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
       - name: Setup Hexo
         env:
           ACTION_DEPLOY_KEY: ${{ secrets.HEXO_DEPLOY_KEY }}
@@ -36,11 +46,11 @@ jobs:
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           git config --global user.email "huangpeiszu@gmail.com"
           git config --global user.name "huangpei"
-          npm install hexo-cli -g
           npm install
+          npm install -g hexo-cli --save
 
       - name: Deploy
         run: |
           hexo clean
           hexo g
-          hexo deploy
+          hexo d
