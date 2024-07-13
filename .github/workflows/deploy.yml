@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - deploy
+    paths:
+      - '*.json'
+      - '**.yml'
+      - '**/source/**'
 
 jobs:
   build:
