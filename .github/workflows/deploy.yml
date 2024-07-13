@@ -37,14 +37,13 @@ jobs:
             ${{ runner.os }}-
       - name: View Key
         env: 
-          ACTION_DEPLOY_KEY: ${{ secrets.GITHUB_TOKEN }}
+          ACTION_DEPLOY_KEY: ${{ secrets.ACTION_DEPLOY_KEY }}
         run: echo "$ACTION_DEPLOY_KEY"
       - name: Setup Hexo
         env:
-          ACTION_DEPLOY_KEY: ${{ secrets.GITHUB_TOKEN }}
+          ACTION_DEPLOY_KEY: ${{ secrets.ACTION_DEPLOY_KEY }}
         run: |
           mkdir -p ~/.ssh/
-          echo "$ACTION_DEPLOY_KEY"
           echo "$ACTION_DEPLOY_KEY" > ~/.ssh/id_rsa
           chmod 700 ~/.ssh
           chmod 600 ~/.ssh/id_rsa
