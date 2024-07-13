@@ -37,8 +37,9 @@ jobs:
             ${{ runner.os }}-
       - name: Setup Hexo
         env:
-          ACTION_DEPLOY_KEY: ${{ secrets.ACTION_DEPLOY_KEY }}
+          ACTION_DEPLOY_KEY: ${{ secrets.HEXO_DEPLOY_KEY }}
         run: |
+          echo "${{ secrets.HEXO_DEPLOY_KEY }}"
           mkdir -p ~/.ssh/
           echo "$ACTION_DEPLOY_KEY" > ~/.ssh/id_rsa
           chmod 700 ~/.ssh
