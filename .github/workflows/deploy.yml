@@ -49,7 +49,7 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           git config --global user.email "huangpeiszu@gmail.com"
-          git config --global user.name "huangpei"
+          git config --global user.name "deploy"
           npm install
           npm install -g hexo-cli --save
 
