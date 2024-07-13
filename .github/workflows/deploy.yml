@@ -37,11 +37,11 @@ jobs:
             ${{ runner.os }}-
       - name: View Key
         env: 
-          ACTION_DEPLOY_KEY: ${{ secrets.HEXO_DEPLOY_KEY }}
+          ACTION_DEPLOY_KEY: ${{ secrets.GITHUB_TOKEN }}
         run: echo "$ACTION_DEPLOY_KEY"
       - name: Setup Hexo
         env:
-          ACTION_DEPLOY_KEY: ${{ secrets.HEXO_DEPLOY_KEY }}
+          ACTION_DEPLOY_KEY: ${{ secrets.GITHUB_TOKEN }}
         run: |
           mkdir -p ~/.ssh/
           echo "$ACTION_DEPLOY_KEY"
