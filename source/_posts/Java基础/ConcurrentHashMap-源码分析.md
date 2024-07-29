@@ -294,8 +294,10 @@ private HashEntry<K,V> scanAndLockForPut(K key, int hash, V value) {
 
 ### 扩容rehash
 
-```ConcurrentHashMap``` 的扩容只会扩容到原来的两倍。老数组里的数据移动到新的数组时，位置要么不变，要么变为 ```index+oldSize```，参数里的 ```node``` 会在扩容之后使用链表头插法插入到指定位置。
+ConcurrentHashMap的扩容只会扩容到原来的两倍。老数组里的数据移动到新的数组时，位置要么不变，要么变为index+oldSize，参数里的node会在扩容之后使用链表头插法插入到指定位置。
+
 ```java
+
 private void rehash(HashEntry<K,V> node) {
     HashEntry<K,V>[] oldTable = table;
     // 老容量
