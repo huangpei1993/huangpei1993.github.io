@@ -1,7 +1,7 @@
 ---
 title: Spring之Bean的生命周期
 date: 2024-09-06 11:04:08
-catagories: Spring
+categories: Spring
 tags:
 - Spring
 - Spring Bean
