@@ -111,7 +111,7 @@ public class MyBeanPostProcessor implements InstantiationAwareBeanPostProcessor 
 }
 ```
 
-如上代码会导致，在userService这个Bean实例化前，会进行打印`myBean的实例化前`。
+如上代码会导致，在myBean这个Bean实例化前，会进行打印`myBean的实例化前`。
 
 值得注意的是，`postProcessBeforeInstantiation()`是有返回值的，如果这么实现：
 postProcessBeforeInstantiation()`。比如：
