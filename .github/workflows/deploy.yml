@@ -1,55 +1,57 @@
-name: Hexo Deploy
+name: Deploy Hexo to GitHub Pages
 
 on:
   push:
     branches:
       - master
-    paths:
-      - '*.json'
-      - '**.yml'
-      - '**/source/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.event.repository.owner.id == github.event.sender.id
 
     steps:
       - name: Checkout source
-        uses: actions/checkout@v2
-        with:
-          ref: master
+        uses: actions/checkout@v6
 
       - name: Setup Node.js
-        uses: actions/setup-node@v2
-      
-      - name: Cache node_modules
-        uses: actions/cache@v4
-        env:
-          cache-name: cache-node-modules
-        
+        uses: actions/setup-node@v4
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
-      - name: Setup Hexo
-        env:
-          ACTION_DEPLOY_KEY: ${{ secrets.HEXO_DEPLOY_KEY }}
-        run: |
-          mkdir -p ~/.ssh/
-          echo "$ACTION_DEPLOY_KEY" > ~/.ssh/id_rsa
-          chmod 700 ~/.ssh
-          chmod 600 ~/.ssh/id_rsa
-          git config --global user.email "huangpeiszu@gmail.com"
-          git config --global user.name "deploy"
-          npm install
-          npm install -g hexo-cli --save
+          node-version: 20
+          cache: npm
 
-      - name: Deploy
-        run: |
-          hexo clean
-          hexo g
-          hexo d
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Hexo site
+        run: npm run build
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: ./public
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
