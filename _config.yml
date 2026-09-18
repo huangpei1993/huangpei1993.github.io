@@ -74,6 +74,10 @@ default_category: uncategorized
 category_map:
 tag_map:
 
+# 分类归档页优先按文章 category_order 升序展示；数值越小越靠前。
+category_generator:
+  order_by: category_order
+
 # Metadata elements
 ## https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta
 meta_generator: true
@@ -101,7 +105,7 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: hexo-theme-matery
+theme: amazing
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
@@ -110,7 +114,7 @@ deploy:
   repository: git@github.com:huangpei1993/huangpei1993.github.io.git
   branch: deploy
 
-# hexo-theme-matery 配置
+# Hexo 站点插件与兼容配置
 search:
   path: search.xml
   field: post

@@ -7,7 +7,7 @@ tags:
 - 源码
 ---
 
-作为```HashMap```的线程安全的版本，```ConcurrentHashMap```的使用频率是非常高的，本文将通过其源码来分析它的存储结构和实现原理。
+作为`HashMap`的线程安全的版本，`ConcurrentHashMap`的使用频率是非常高的，本文将通过其源码来分析它的存储结构和实现原理。
 
 ## JDK1.7 中的ConcurrentHashMap
 

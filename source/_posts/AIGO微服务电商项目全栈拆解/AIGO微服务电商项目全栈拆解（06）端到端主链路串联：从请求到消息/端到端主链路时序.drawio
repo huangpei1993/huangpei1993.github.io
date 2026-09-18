@@ -1,0 +1,459 @@
+<mxfile>
+  <diagram id="seqlayout" name="AIGO 主链路时序">
+    <mxGraphModel dx="800" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="user" value="用户/浏览器" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;size=40;participant=umlActor;verticalAlign=bottom;spacingBottom=-14;labelBackgroundColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="100" height="5190" as="geometry"/>
+        </mxCell>
+        <mxCell id="gateway" value="Gateway HTTP/BFF" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;size=40;" vertex="1" parent="1">
+          <mxGeometry x="240" y="40" width="100" height="5190" as="geometry"/>
+        </mxCell>
+        <mxCell id="member" value="Member gRPC" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;size=40;" vertex="1" parent="1">
+          <mxGeometry x="440" y="40" width="100" height="5190" as="geometry"/>
+        </mxCell>
+        <mxCell id="product" value="Product gRPC" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;size=40;" vertex="1" parent="1">
+          <mxGeometry x="640" y="40" width="100" height="5190" as="geometry"/>
+        </mxCell>
+        <mxCell id="cart" value="Cart gRPC" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;size=40;" vertex="1" parent="1">
+          <mxGeometry x="840" y="40" width="100" height="5190" as="geometry"/>
+        </mxCell>
+        <mxCell id="promotion" value="Promotion gRPC" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;size=40;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="40" width="100" height="5190" as="geometry"/>
+        </mxCell>
+        <mxCell id="order" value="Order gRPC" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;size=40;" vertex="1" parent="1">
+          <mxGeometry x="1240" y="40" width="100" height="5190" as="geometry"/>
+        </mxCell>
+        <mxCell id="payment" value="支付平台" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;size=40;" vertex="1" parent="1">
+          <mxGeometry x="1440" y="40" width="100" height="5190" as="geometry"/>
+        </mxCell>
+        <mxCell id="mq" value="RabbitMQ" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;size=40;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="40" width="100" height="5190" as="geometry"/>
+        </mxCell>
+        <mxCell id="admin" value="Admin Gin" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;size=40;" vertex="1" parent="1">
+          <mxGeometry x="1840" y="40" width="100" height="5190" as="geometry"/>
+        </mxCell>
+        <mxCell id="timer" value="定时任务" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;size=40;" vertex="1" parent="1">
+          <mxGeometry x="2040" y="40" width="100" height="5190" as="geometry"/>
+        </mxCell>
+        <mxCell id="act0" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;fillColor=#ffffff;" vertex="1" parent="member">
+          <mxGeometry x="45" y="200" width="10" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="act1" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;fillColor=#ffffff;" vertex="1" parent="gateway">
+          <mxGeometry x="45" y="150" width="10" height="150" as="geometry"/>
+        </mxCell>
+        <mxCell id="act2" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;fillColor=#ffffff;" vertex="1" parent="promotion">
+          <mxGeometry x="45" y="640" width="10" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="act3" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;fillColor=#ffffff;" vertex="1" parent="product">
+          <mxGeometry x="45" y="740" width="10" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="act4" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;fillColor=#ffffff;" vertex="1" parent="gateway">
+          <mxGeometry x="45" y="350" width="10" height="490" as="geometry"/>
+        </mxCell>
+        <mxCell id="act5" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;fillColor=#ffffff;" vertex="1" parent="cart">
+          <mxGeometry x="45" y="940" width="10" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="act6" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;fillColor=#ffffff;" vertex="1" parent="gateway">
+          <mxGeometry x="45" y="890" width="10" height="150" as="geometry"/>
+        </mxCell>
+        <mxCell id="act7" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;fillColor=#ffffff;" vertex="1" parent="cart">
+          <mxGeometry x="45" y="1190" width="10" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="act8" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;fillColor=#ffffff;" vertex="1" parent="member">
+          <mxGeometry x="45" y="520" width="10" height="820" as="geometry"/>
+        </mxCell>
+        <mxCell id="act9" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;fillColor=#ffffff;" vertex="1" parent="promotion">
+          <mxGeometry x="45" y="1390" width="10" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="act10" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;fillColor=#ffffff;" vertex="1" parent="order">
+          <mxGeometry x="45" y="1140" width="10" height="350" as="geometry"/>
+        </mxCell>
+        <mxCell id="act11" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;fillColor=#ffffff;" vertex="1" parent="cart">
+          <mxGeometry x="45" y="1540" width="10" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="act12" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;fillColor=#ffffff;" vertex="1" parent="promotion">
+          <mxGeometry x="45" y="1640" width="10" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="act13" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;fillColor=#ffffff;" vertex="1" parent="gateway">
+          <mxGeometry x="45" y="1090" width="10" height="650" as="geometry"/>
+        </mxCell>
+        <mxCell id="act14" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;fillColor=#ffffff;" vertex="1" parent="cart">
+          <mxGeometry x="45" y="1890" width="10" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="act15" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;fillColor=#ffffff;" vertex="1" parent="product">
+          <mxGeometry x="45" y="1990" width="10" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="act16" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;fillColor=#ffffff;" vertex="1" parent="member">
+          <mxGeometry x="45" y="2090" width="10" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="act17" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;fillColor=#ffffff;" vertex="1" parent="promotion">
+          <mxGeometry x="45" y="2190" width="10" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="act18" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;fillColor=#ffffff;" vertex="1" parent="cart">
+          <mxGeometry x="45" y="2360" width="10" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="act19" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;fillColor=#ffffff;" vertex="1" parent="order">
+          <mxGeometry x="45" y="1840" width="10" height="670" as="geometry"/>
+        </mxCell>
+        <mxCell id="act20" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;fillColor=#ffffff;" vertex="1" parent="gateway">
+          <mxGeometry x="45" y="1790" width="10" height="770" as="geometry"/>
+        </mxCell>
+        <mxCell id="act21" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;fillColor=#ffffff;" vertex="1" parent="payment">
+          <mxGeometry x="45" y="2710" width="10" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="act22" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;fillColor=#ffffff;" vertex="1" parent="order">
+          <mxGeometry x="45" y="2660" width="10" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="act23" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;fillColor=#ffffff;" vertex="1" parent="payment">
+          <mxGeometry x="45" y="2930" width="10" height="200" as="geometry"/>
+        </mxCell>
+        <mxCell id="act24" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;fillColor=#ffffff;" vertex="1" parent="promotion">
+          <mxGeometry x="45" y="3540" width="10" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="act25" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;fillColor=#ffffff;" vertex="1" parent="gateway">
+          <mxGeometry x="45" y="2610" width="10" height="1030" as="geometry"/>
+        </mxCell>
+        <mxCell id="act26" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;fillColor=#ffffff;" vertex="1" parent="order">
+          <mxGeometry x="45" y="3030" width="10" height="880" as="geometry"/>
+        </mxCell>
+        <mxCell id="act27" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;fillColor=#ffffff;" vertex="1" parent="gateway">
+          <mxGeometry x="45" y="3810" width="10" height="150" as="geometry"/>
+        </mxCell>
+        <mxCell id="act28" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;fillColor=#ffffff;" vertex="1" parent="order">
+          <mxGeometry x="45" y="4180" width="10" height="420" as="geometry"/>
+        </mxCell>
+        <mxCell id="act29" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;fillColor=#ffffff;" vertex="1" parent="payment">
+          <mxGeometry x="45" y="4750" width="10" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="act30" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;fillColor=#ffffff;" vertex="1" parent="member">
+          <mxGeometry x="45" y="3300" width="10" height="1600" as="geometry"/>
+        </mxCell>
+        <mxCell id="act31" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;fillColor=#ffffff;" vertex="1" parent="order">
+          <mxGeometry x="45" y="4700" width="10" height="350" as="geometry"/>
+        </mxCell>
+        <mxCell id="act32" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;fillColor=#ffffff;" vertex="1" parent="gateway">
+          <mxGeometry x="45" y="4130" width="10" height="970" as="geometry"/>
+        </mxCell>
+        <mxCell id="act33" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;fillColor=#ffffff;" vertex="1" parent="mq">
+          <mxGeometry x="45" y="470" width="10" height="4680" as="geometry"/>
+        </mxCell>
+        <mxCell id="act34" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;fillColor=#ffffff;" vertex="1" parent="admin">
+          <mxGeometry x="45" y="3420" width="10" height="1730" as="geometry"/>
+        </mxCell>
+        <mxCell id="note0" value="实线=同步 HTTP/gRPC；虚线=异步消息或后台任务；支付平台通知是异步 HTTP，不是 MQ。" style="shape=note;whiteSpace=wrap;html=1;size=14;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="310" y="110" width="140" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="m1" value="注册/登录 HTTP" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=0.5;exitY=0.0289;entryX=0;entryY=0.0;" edge="1" parent="1" source="user" target="act1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m2" value="Register / Login gRPC" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=1;exitY=0.3333;entryX=0;entryY=0.0;" edge="1" parent="1" source="act1" target="act0">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m3" value="Token / memberId" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;strokeColor=#999999;fontColor=#999999;exitX=0;exitY=1.0;entryX=1;entryY=0.6667;" edge="1" parent="1" source="act0" target="act1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m4" value="登录结果" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;strokeColor=#999999;fontColor=#999999;exitX=0;exitY=1.0;entryX=0.5;entryY=0.0578;" edge="1" parent="1" source="act1" target="user">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m5" value="首次登录态请求：浏览首页/商品" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=0.5;exitY=0.0674;entryX=0;entryY=0.0;" edge="1" parent="1" source="user" target="act4">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m6" value="Auth 校验 JWT；FirstAccess 标记当日首访" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=1;exitY=0.102;entryX=1;entryY=0.1633;" edge="1" parent="1" source="act4" target="act4">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="350" y="440"/><mxPoint x="350" y="470"/></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m7" value="gateway.first-access：异步发布" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;exitX=1;exitY=0.2449;entryX=0;entryY=0.0;" edge="1" parent="1" source="act4" target="act33">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m8" value="消费首访消息：每日积分" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;exitX=0;exitY=0.0107;entryX=1;entryY=0.0;" edge="1" parent="1" source="act33" target="act8">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m9" value="账本业务键幂等入账" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=1;exitY=0.061;entryX=1;entryY=0.0976;" edge="1" parent="1" source="act8" target="act8">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="550" y="610"/><mxPoint x="550" y="640"/></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m10" value="首页运营位/推荐列表 gRPC" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=1;exitY=0.5918;entryX=0;entryY=0.0;" edge="1" parent="1" source="act4" target="act2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m11" value="首页数据" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;strokeColor=#999999;fontColor=#999999;exitX=0;exitY=1.0;entryX=1;entryY=0.6939;" edge="1" parent="1" source="act2" target="act4">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m12" value="商品详情/分类 gRPC" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=1;exitY=0.7959;entryX=0;entryY=0.0;" edge="1" parent="1" source="act4" target="act3">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m13" value="商品数据" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;strokeColor=#999999;fontColor=#999999;exitX=0;exitY=1.0;entryX=1;entryY=0.898;" edge="1" parent="1" source="act3" target="act4">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m14" value="浏览页面响应" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;strokeColor=#999999;fontColor=#999999;exitX=0;exitY=1.0;entryX=0.5;entryY=0.1618;" edge="1" parent="1" source="act4" target="user">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m15" value="加购 HTTP" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=0.5;exitY=0.1715;entryX=0;entryY=0.0;" edge="1" parent="1" source="user" target="act6">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m16" value="CartAdd gRPC" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=1;exitY=0.3333;entryX=0;entryY=0.0;" edge="1" parent="1" source="act6" target="act5">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m17" value="加购成功" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;strokeColor=#999999;fontColor=#999999;exitX=0;exitY=1.0;entryX=1;entryY=0.6667;" edge="1" parent="1" source="act5" target="act6">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m18" value="200 OK" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;strokeColor=#999999;fontColor=#999999;exitX=0;exitY=1.0;entryX=0.5;entryY=0.2004;" edge="1" parent="1" source="act6" target="user">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m19" value="确认订单/金额试算 HTTP" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=0.5;exitY=0.21;entryX=0;entryY=0.0;" edge="1" parent="1" source="user" target="act13">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m20" value="GenerateConfirmOrder gRPC" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=1;exitY=0.0769;entryX=0;entryY=0.0;" edge="1" parent="1" source="act13" target="act10">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m21" value="读取选中购物车行" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=0;exitY=0.1429;entryX=1;entryY=0.0;" edge="1" parent="1" source="act10" target="act7">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m22" value="购物车快照" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;strokeColor=#999999;fontColor=#999999;exitX=1;exitY=1.0;entryX=0;entryY=0.2857;" edge="1" parent="1" source="act7" target="act10">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m23" value="地址/会员/积分快照" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=0;exitY=0.4286;entryX=1;entryY=0.939;" edge="1" parent="1" source="act10" target="act8">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m24" value="会员结算信息" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;strokeColor=#999999;fontColor=#999999;exitX=1;exitY=1.0;entryX=0;entryY=0.5714;" edge="1" parent="1" source="act8" target="act10">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m25" value="优惠券可用性/抵扣试算" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=0;exitY=0.7143;entryX=1;entryY=0.0;" edge="1" parent="1" source="act10" target="act9">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m26" value="优惠券试算结果" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;strokeColor=#999999;fontColor=#999999;exitX=1;exitY=1.0;entryX=0;entryY=0.8571;" edge="1" parent="1" source="act9" target="act10">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m27" value="确认单基础数据" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;strokeColor=#999999;fontColor=#999999;exitX=0;exitY=1.0;entryX=1;entryY=0.6154;" edge="1" parent="1" source="act10" target="act13">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m28" value="展示用购物车明细" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=1;exitY=0.6923;entryX=0;entryY=0.0;" edge="1" parent="1" source="act13" target="act11">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m29" value="明细" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;strokeColor=#999999;fontColor=#999999;exitX=0;exitY=1.0;entryX=1;entryY=0.7692;" edge="1" parent="1" source="act11" target="act13">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m30" value="逐券计算匹配商品" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=1;exitY=0.8462;entryX=0;entryY=0.0;" edge="1" parent="1" source="act13" target="act12">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m31" value="可选优惠券列表" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;strokeColor=#999999;fontColor=#999999;exitX=0;exitY=1.0;entryX=1;entryY=0.9231;" edge="1" parent="1" source="act12" target="act13">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m32" value="确认单：金额/积分/优惠券" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;strokeColor=#999999;fontColor=#999999;exitX=0;exitY=1.0;entryX=0.5;entryY=0.3353;" edge="1" parent="1" source="act13" target="user">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m33" value="提交订单 HTTP" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=0.5;exitY=0.3449;entryX=0;entryY=0.0;" edge="1" parent="1" source="user" target="act20">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m34" value="GenerateOrder gRPC" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=1;exitY=0.0649;entryX=0;entryY=0.0;" edge="1" parent="1" source="act20" target="act19">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m35" value="读取选中行" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=0;exitY=0.0746;entryX=1;entryY=0.0;" edge="1" parent="1" source="act19" target="act14">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m36" value="购物车数据" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;strokeColor=#999999;fontColor=#999999;exitX=1;exitY=1.0;entryX=0;entryY=0.1493;" edge="1" parent="1" source="act14" target="act19">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m37" value="按订单号预占库存" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=0;exitY=0.2239;entryX=1;entryY=0.0;" edge="1" parent="1" source="act19" target="act15">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m38" value="预占结果" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;strokeColor=#999999;fontColor=#999999;exitX=1;exitY=1.0;entryX=0;entryY=0.2985;" edge="1" parent="1" source="act15" target="act19">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m39" value="扣减已用积分/补齐会员信息" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=0;exitY=0.3731;entryX=1;entryY=0.0;" edge="1" parent="1" source="act19" target="act16">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m40" value="扣减结果" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;strokeColor=#999999;fontColor=#999999;exitX=1;exitY=1.0;entryX=0;entryY=0.4478;" edge="1" parent="1" source="act16" target="act19">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m41" value="标记优惠券已使用" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=0;exitY=0.5224;entryX=1;entryY=0.0;" edge="1" parent="1" source="act19" target="act17">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m42" value="使用结果" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;strokeColor=#999999;fontColor=#999999;exitX=1;exitY=1.0;entryX=0;entryY=0.597;" edge="1" parent="1" source="act17" target="act19">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m43" value="本地事务：订单/明细落库" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=1;exitY=0.6716;entryX=1;entryY=0.7164;" edge="1" parent="1" source="act19" target="act19">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="1350" y="2330"/><mxPoint x="1350" y="2360"/></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m44" value="提交后删除购物车行" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=0;exitY=0.7761;entryX=1;entryY=0.0;" edge="1" parent="1" source="act19" target="act18">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m45" value="删除结果" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;strokeColor=#999999;fontColor=#999999;exitX=1;exitY=1.0;entryX=0;entryY=0.8507;" edge="1" parent="1" source="act18" target="act19">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m46" value="order.expiration：延迟关单消息" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;exitX=1;exitY=0.9254;entryX=0;entryY=0.4252;" edge="1" parent="1" source="act19" target="act33">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m47" value="orderSn / paymentRequired" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;strokeColor=#999999;fontColor=#999999;exitX=0;exitY=1.0;entryX=1;entryY=0.9351;" edge="1" parent="1" source="act19" target="act20">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m48" value="下单结果" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;strokeColor=#999999;fontColor=#999999;exitX=0;exitY=1.0;entryX=0.5;entryY=0.4933;" edge="1" parent="1" source="act20" target="user">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m49" value="准备支付 HTTP" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=0.5;exitY=0.5029;entryX=0;entryY=0.0;" edge="1" parent="1" source="user" target="act25">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m50" value="PreparePayment gRPC" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=1;exitY=0.0485;entryX=0;entryY=0.0;" edge="1" parent="1" source="act25" target="act22">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m51" value="创建二维码/收银台" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=1;exitY=0.2273;entryX=0;entryY=0.0;" edge="1" parent="1" source="act22" target="act21">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m52" value="支付入口" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;strokeColor=#999999;fontColor=#999999;exitX=0;exitY=1.0;entryX=1;entryY=0.4545;" edge="1" parent="1" source="act21" target="act22">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m53" value="写入/刷新 PENDING 流水" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=1;exitY=0.6818;entryX=1;entryY=0.8182;" edge="1" parent="1" source="act22" target="act22">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="1350" y="2850"/><mxPoint x="1350" y="2880"/></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m54" value="二维码/收银台 URL" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;strokeColor=#999999;fontColor=#999999;exitX=0;exitY=1.0;entryX=1;entryY=0.2621;" edge="1" parent="1" source="act22" target="act25">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m55" value="在支付平台完成付款" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=0.5;exitY=0.5645;entryX=0;entryY=0.0;" edge="1" parent="1" source="user" target="act23">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m56" value="异步通知/同步回跳 HTTP" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;exitX=0;exitY=0.25;entryX=1;entryY=0.3592;" edge="1" parent="1" source="act23" target="act25">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m57" value="SyncPayment：验签/查单/同步状态" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=1;exitY=0.4078;entryX=0;entryY=0.0;" edge="1" parent="1" source="act25" target="act26">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m58" value="再次查单确认" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=1;exitY=0.0568;entryX=0;entryY=0.75;" edge="1" parent="1" source="act26" target="act23">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m59" value="SUCCESS/CLOSED" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;strokeColor=#999999;fontColor=#999999;exitX=0;exitY=1.0;entryX=1;entryY=0.1136;" edge="1" parent="1" source="act23" target="act26">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m60" value="事务：支付流水 + 订单 0→1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=1;exitY=0.1705;entryX=1;entryY=0.2045;" edge="1" parent="1" source="act26" target="act26">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="1350" y="3220"/><mxPoint x="1350" y="3250"/></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m61" value="order.status.changed：pay" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;exitX=1;exitY=0.25;entryX=0;entryY=0.594;" edge="1" parent="1" source="act26" target="act33">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m62" value="消费 pay：积分/成长值结算" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;exitX=0;exitY=0.6047;entryX=1;entryY=0.0;" edge="1" parent="1" source="act33" target="act30">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m63" value="PAYMENT 账本幂等入账" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=1;exitY=0.0312;entryX=1;entryY=0.05;" edge="1" parent="1" source="act30" target="act30">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="550" y="3390"/><mxPoint x="550" y="3420"/></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m64" value="消费状态消息：管理端投影" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;exitX=1;exitY=0.6303;entryX=0;entryY=0.0;" edge="1" parent="1" source="act33" target="act34">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m65" value="校验版本并更新 order 库" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=1;exitY=0.0289;entryX=1;entryY=0.0462;" edge="1" parent="1" source="act34" target="act34">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="1950" y="3510"/><mxPoint x="1950" y="3540"/></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m66" value="支付后 GET delivery/{orderSn}" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=1;exitY=0.9029;entryX=0;entryY=0.0;" edge="1" parent="1" source="act25" target="act24">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m67" value="最多 3 张投放卡片/快照" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;strokeColor=#999999;fontColor=#999999;exitX=0;exitY=1.0;entryX=1;entryY=0.9515;" edge="1" parent="1" source="act24" target="act25">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m68" value="投放卡片" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;strokeColor=#999999;fontColor=#999999;exitX=0;exitY=1.0;entryX=0.5;entryY=0.7013;" edge="1" parent="1" source="act25" target="user">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m69" value="运营人员发货：物流策略 + 写物流快照" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=1;exitY=0.1561;entryX=1;entryY=0.1734;" edge="1" parent="1" source="act34" target="act34">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="1950" y="3730"/><mxPoint x="1950" y="3760"/></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m70" value="order.status.changed：ship" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;exitX=0;exitY=0.1965;entryX=1;entryY=0.703;" edge="1" parent="1" source="act34" target="act33">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m71" value="查询订单/物流 HTTP" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=0.5;exitY=0.7341;entryX=0;entryY=0.0;" edge="1" parent="1" source="user" target="act27">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m72" value="订单详情 gRPC" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=1;exitY=0.3333;entryX=0;entryY=0.9432;" edge="1" parent="1" source="act27" target="act26">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m73" value="订单状态 + 物流快照" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;strokeColor=#999999;fontColor=#999999;exitX=0;exitY=1.0;entryX=1;entryY=0.6667;" edge="1" parent="1" source="act26" target="act27">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m74" value="物流轨迹" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;strokeColor=#999999;fontColor=#999999;exitX=0;exitY=1.0;entryX=0.5;entryY=0.763;" edge="1" parent="1" source="act27" target="user">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m75" value="每 5 分钟同步已发货物流" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;exitX=0.5;exitY=0.7726;entryX=1;entryY=0.341;" edge="1" parent="1" source="timer" target="act34">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m76" value="local provider 生成/推进轨迹" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=1;exitY=0.3699;entryX=1;entryY=0.3873;" edge="1" parent="1" source="act34" target="act34">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="1950" y="4100"/><mxPoint x="1950" y="4130"/></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m77" value="确认收货 HTTP" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=0.5;exitY=0.7958;entryX=0;entryY=0.0;" edge="1" parent="1" source="user" target="act32">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m78" value="ConfirmReceipt gRPC" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=1;exitY=0.0515;entryX=0;entryY=0.0;" edge="1" parent="1" source="act32" target="act28">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m79" value="CAS：订单 2→3" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=1;exitY=0.119;entryX=1;entryY=0.1905;" edge="1" parent="1" source="act28" target="act28">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="1350" y="4270"/><mxPoint x="1350" y="4300"/></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m80" value="order.status.changed：confirm_receipt" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;exitX=1;exitY=0.2857;entryX=0;entryY=0.8184;" edge="1" parent="1" source="act28" target="act33">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m81" value="每 1 小时扫描并投递 auto-receipt 延迟消息" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;exitX=0.5;exitY=0.8382;entryX=1;entryY=0.8291;" edge="1" parent="1" source="timer" target="act33">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m82" value="到期消费：自动确认收货" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;exitX=0;exitY=0.8397;entryX=1;entryY=0.5238;" edge="1" parent="1" source="act33" target="act28">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m83" value="order.status.changed：auto_confirm_receipt" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;exitX=1;exitY=0.6429;entryX=0;entryY=0.8504;" edge="1" parent="1" source="act28" target="act33">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m84" value="申请售后/提交退货物流 HTTP" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=0.5;exitY=0.8671;entryX=0;entryY=0.3814;" edge="1" parent="1" source="user" target="act32">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m85" value="CreateAfterSale / SubmitLogistics gRPC" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=1;exitY=0.433;entryX=0;entryY=0.881;" edge="1" parent="1" source="act32" target="act28">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m86" value="售后单状态" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;strokeColor=#999999;fontColor=#999999;exitX=0;exitY=1.0;entryX=1;entryY=0.4845;" edge="1" parent="1" source="act28" target="act32">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m87" value="after-sale.command：APPROVE/REJECT/CONFIRM_RECEIVE" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;exitX=0;exitY=0.711;entryX=1;entryY=0.8932;" edge="1" parent="1" source="act34" target="act33">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m88" value="消费售后命令" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;exitX=0;exitY=0.9038;entryX=1;entryY=0.0;" edge="1" parent="1" source="act33" target="act31">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m89" value="查退款/发起退款" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=1;exitY=0.1429;entryX=0;entryY=0.0;" edge="1" parent="1" source="act31" target="act29">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m90" value="退款结果" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;strokeColor=#999999;fontColor=#999999;exitX=0;exitY=1.0;entryX=1;entryY=0.2857;" edge="1" parent="1" source="act29" target="act31">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m91" value="返还/撤销积分成长值" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=0;exitY=0.4286;entryX=1;entryY=0.9688;" edge="1" parent="1" source="act31" target="act30">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m92" value="账本处理结果" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;strokeColor=#999999;fontColor=#999999;exitX=1;exitY=1.0;entryX=0;entryY=0.5714;" edge="1" parent="1" source="act30" target="act31">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m93" value="申请/下载发票 HTTP" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=0.5;exitY=0.9538;entryX=0;entryY=0.8454;" edge="1" parent="1" source="user" target="act32">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m94" value="ApplyInvoice / DownloadInvoice gRPC" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=1;exitY=0.8969;entryX=0;entryY=0.8571;" edge="1" parent="1" source="act32" target="act31">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m95" value="发票号或 PDF" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;strokeColor=#999999;fontColor=#999999;exitX=0;exitY=1.0;entryX=1;entryY=0.9485;" edge="1" parent="1" source="act31" target="act32">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m96" value="发票结果" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;strokeColor=#999999;fontColor=#999999;exitX=0;exitY=1.0;entryX=0.5;entryY=0.9827;" edge="1" parent="1" source="act32" target="user">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

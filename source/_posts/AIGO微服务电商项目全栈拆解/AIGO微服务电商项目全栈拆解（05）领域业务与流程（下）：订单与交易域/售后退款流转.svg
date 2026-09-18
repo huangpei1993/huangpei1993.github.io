@@ -1,0 +1,149 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1480" height="920" viewBox="0 0 1480 920">
+  <rect width="1480" height="920" fill="#ffffff"/>
+  <defs>
+    <marker id="s-rose" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#be123c"/></marker>
+    <marker id="s-teal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#0f766e"/></marker>
+    <marker id="s-indigo" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#6366f1"/></marker>
+    <marker id="s-amber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#b45309"/></marker>
+    <marker id="s-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/></marker>
+  </defs>
+
+  <text x="40" y="52" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="27" fill="#0f172a" font-weight="bold">售后：独立聚合的两种类型、两条流转</text>
+  <text x="40" y="82" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="14" fill="#64748b">售后状态与退款状态是两个维度；管理端只发命令，状态推进与渠道退款全部在订单服务</text>
+
+  <!-- ================= 仅退款 ================= -->
+  <rect x="40" y="118" width="1400" height="228" rx="16" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="64" y="148" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="14" fill="#be123c" font-weight="bold">仅退款 REFUND_ONLY</text>
+  <text x="230" y="148" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="12" fill="#64748b">适用于待发货及之后的订单；语义是「整单不要了」，按全部明细的全部数量申请</text>
+
+  <rect x="90" y="168" width="170" height="68" rx="11" fill="#ffffff" stroke="#be123c" stroke-width="1.7"/>
+  <text x="175" y="198" text-anchor="middle" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="14" fill="#be123c" font-weight="bold">待审核</text>
+  <text x="175" y="220" text-anchor="middle" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="11.5" fill="#64748b">PENDING_REVIEW</text>
+
+  <rect x="330" y="168" width="170" height="68" rx="11" fill="#ffffff" stroke="#be123c" stroke-width="1.7"/>
+  <text x="415" y="198" text-anchor="middle" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="14" fill="#be123c" font-weight="bold">审核通过</text>
+  <text x="415" y="220" text-anchor="middle" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="11.5" fill="#64748b">直接进入退款中</text>
+
+  <rect x="570" y="168" width="170" height="68" rx="11" fill="#fff1f2" stroke="#be123c" stroke-width="1.7"/>
+  <text x="655" y="198" text-anchor="middle" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="14" fill="#be123c" font-weight="bold">退款中</text>
+  <text x="655" y="220" text-anchor="middle" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="11.5" fill="#64748b">REFUNDING</text>
+
+  <rect x="810" y="168" width="170" height="68" rx="11" fill="#ecfdf5" stroke="#047857" stroke-width="1.8"/>
+  <text x="895" y="198" text-anchor="middle" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="14" fill="#047857" font-weight="bold">已完成</text>
+  <text x="895" y="220" text-anchor="middle" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="11.5" fill="#64748b">COMPLETED</text>
+
+  <path d="M 262 202 L 325 202" fill="none" stroke="#be123c" stroke-width="1.7" marker-end="url(#s-rose)"/>
+  <text x="293" y="192" text-anchor="middle" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="11.5" fill="#be123c" font-weight="bold">APPROVE</text>
+  <path d="M 502 202 L 565 202" fill="none" stroke="#be123c" stroke-width="1.7" marker-end="url(#s-rose)"/>
+  <text x="533" y="192" text-anchor="middle" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="11.5" fill="#be123c" font-weight="bold">触发退款</text>
+  <path d="M 742 202 L 805 202" fill="none" stroke="#047857" stroke-width="1.7" marker-end="url(#s-teal)"/>
+  <text x="773" y="192" text-anchor="middle" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="11.5" fill="#047857" font-weight="bold">渠道成功</text>
+
+  <rect x="90" y="262" width="360" height="62" rx="10" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.3" stroke-dasharray="5 4"/>
+  <text x="110" y="286" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="12.5" fill="#475569" font-weight="bold">旁支（两种类型共用）</text>
+  <text x="110" y="308" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="12" fill="#64748b">待审核阶段可 REJECT → 已拒绝；可取消 → 已取消</text>
+  <path d="M 175 240 L 175 258" fill="none" stroke="#94a3b8" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#s-gray)"/>
+
+  <rect x="1000" y="168" width="416" height="156" rx="12" fill="#ffffff" stroke="#fecdd3" stroke-width="1.4"/>
+  <text x="1022" y="196" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="13.5" fill="#be123c" font-weight="bold">申请阶段的三条硬约束</text>
+  <text x="1022" y="222" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="12" fill="#475569">① 订单必须已支付（待发货 ~ 已完成）</text>
+  <text x="1022" y="246" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="12" fill="#475569">② 仅退款：待发货及之后；退货退款：必须已发货</text>
+  <text x="1022" y="270" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="12" fill="#475569">③ 已完成订单有售后窗口：收货时间 + 配置天数</text>
+  <text x="1022" y="296" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="11.5" fill="#94a3b8">数量按「已有有效售后」扣减后的剩余量校验，已拒绝 / 已取消不计入</text>
+  <text x="1022" y="316" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="11.5" fill="#94a3b8">金额与积分全部从原订单明细快照复制，不采信客户端传入值</text>
+
+  <!-- ================= 退货退款 ================= -->
+  <rect x="40" y="362" width="1400" height="172" rx="16" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="64" y="384" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="14" fill="#b45309" font-weight="bold">退货退款 RETURN_AND_REFUND</text>
+
+  <rect x="90" y="410" width="164" height="64" rx="11" fill="#ffffff" stroke="#b45309" stroke-width="1.6"/>
+  <text x="172" y="438" text-anchor="middle" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="13.5" fill="#b45309" font-weight="bold">待审核</text>
+  <text x="172" y="458" text-anchor="middle" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="10.5" fill="#64748b">PENDING_REVIEW</text>
+
+  <rect x="294" y="410" width="164" height="64" rx="11" fill="#ffffff" stroke="#b45309" stroke-width="1.6"/>
+  <text x="376" y="438" text-anchor="middle" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="13.5" fill="#b45309" font-weight="bold">待买家寄回</text>
+  <text x="376" y="458" text-anchor="middle" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="10.5" fill="#64748b">WAIT_BUYER_RETURN</text>
+
+  <rect x="498" y="410" width="164" height="64" rx="11" fill="#ffffff" stroke="#b45309" stroke-width="1.6"/>
+  <text x="580" y="438" text-anchor="middle" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="13.5" fill="#b45309" font-weight="bold">待商家收货</text>
+  <text x="580" y="458" text-anchor="middle" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="10.5" fill="#64748b">WAIT_SELLER_RECEIVE</text>
+
+  <rect x="702" y="410" width="164" height="64" rx="11" fill="#fff1f2" stroke="#be123c" stroke-width="1.6"/>
+  <text x="784" y="438" text-anchor="middle" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="13.5" fill="#be123c" font-weight="bold">退款中</text>
+  <text x="784" y="458" text-anchor="middle" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="10.5" fill="#64748b">REFUNDING</text>
+
+  <rect x="906" y="410" width="164" height="64" rx="11" fill="#ecfdf5" stroke="#047857" stroke-width="1.7"/>
+  <text x="988" y="438" text-anchor="middle" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="13.5" fill="#047857" font-weight="bold">已完成</text>
+  <text x="988" y="458" text-anchor="middle" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="10.5" fill="#64748b">COMPLETED</text>
+
+  <path d="M 256 442 L 289 442" fill="none" stroke="#b45309" stroke-width="1.6" marker-end="url(#s-amber)"/>
+  <text x="272" y="404" text-anchor="middle" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="10.5" fill="#b45309" font-weight="bold">APPROVE</text>
+  <path d="M 460 442 L 493 442" fill="none" stroke="#6366f1" stroke-width="1.6" marker-end="url(#s-indigo)"/>
+  <text x="476" y="404" text-anchor="middle" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="10.5" fill="#4338ca" font-weight="bold">提交物流</text>
+  <path d="M 664 442 L 697 442" fill="none" stroke="#6366f1" stroke-width="1.6" marker-end="url(#s-indigo)"/>
+  <text x="680" y="404" text-anchor="middle" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="10.5" fill="#4338ca" font-weight="bold">CONFIRM_RECEIVE</text>
+  <path d="M 868 442 L 901 442" fill="none" stroke="#047857" stroke-width="1.6" marker-end="url(#s-teal)"/>
+  <text x="884" y="404" text-anchor="middle" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="10.5" fill="#047857" font-weight="bold">渠道成功</text>
+
+  <rect x="1096" y="410" width="320" height="64" rx="10" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.3"/>
+  <text x="1116" y="434" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="12" fill="#475569" font-weight="bold">旁支与仅退款一致</text>
+  <text x="1116" y="456" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="11.5" fill="#64748b">待审核可拒绝 / 取消；待寄回阶段仍可取消</text>
+
+  <rect x="90" y="486" width="1326" height="36" rx="9" fill="#fffbeb" stroke="#fde68a" stroke-width="1.2"/>
+  <text x="108" y="510" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="12" fill="#92400e">比仅退款多两段：用户寄回商品、商家确认收货，商家确认收到退货后才触发退款。退款失败不回退售后状态：售后停在「退款中」，退款单标记失败，由每分钟的兜底任务重试</text>
+
+  <!-- ================= 退款单状态 ================= -->
+  <rect x="40" y="550" width="1400" height="182" rx="16" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="64" y="580" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="14" fill="#0f172a" font-weight="bold">退款单状态：与售后状态并列的第二个维度</text>
+
+  <rect x="90" y="606" width="160" height="62" rx="11" fill="#ffffff" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="170" y="634" text-anchor="middle" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="13.5" fill="#475569" font-weight="bold">未退款</text>
+  <text x="170" y="654" text-anchor="middle" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="10.5" fill="#64748b">NOT_REFUNDED</text>
+
+  <rect x="320" y="606" width="160" height="62" rx="11" fill="#eef2ff" stroke="#6366f1" stroke-width="1.6"/>
+  <text x="400" y="634" text-anchor="middle" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="13.5" fill="#4338ca" font-weight="bold">处理中</text>
+  <text x="400" y="654" text-anchor="middle" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="10.5" fill="#64748b">PROCESSING</text>
+
+  <rect x="620" y="576" width="170" height="56" rx="11" fill="#ecfdf5" stroke="#047857" stroke-width="1.7"/>
+  <text x="705" y="602" text-anchor="middle" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="13.5" fill="#047857" font-weight="bold">成功 SUCCESS</text>
+  <text x="705" y="622" text-anchor="middle" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="10.5" fill="#64748b">渠道返回成功</text>
+
+  <rect x="620" y="648" width="170" height="56" rx="11" fill="#fff1f2" stroke="#be123c" stroke-width="1.7"/>
+  <text x="705" y="674" text-anchor="middle" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="13.5" fill="#be123c" font-weight="bold">失败 FAILED</text>
+  <text x="705" y="694" text-anchor="middle" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="10.5" fill="#64748b">记录错误原因，可重试</text>
+
+  <path d="M 252 637 L 315 637" fill="none" stroke="#6366f1" stroke-width="1.6" marker-end="url(#s-indigo)"/>
+  <text x="283" y="627" text-anchor="middle" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="10.5" fill="#4338ca" font-weight="bold">审核通过</text>
+  <path d="M 482 630 C 540 630 560 604 615 604" fill="none" stroke="#047857" stroke-width="1.6" marker-end="url(#s-teal)"/>
+  <text x="548" y="600" text-anchor="middle" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="10.5" fill="#047857" font-weight="bold">先查后调成功</text>
+  <path d="M 482 645 C 540 645 560 676 615 676" fill="none" stroke="#be123c" stroke-width="1.6" marker-end="url(#s-rose)"/>
+  <text x="548" y="666" text-anchor="middle" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="10.5" fill="#be123c" font-weight="bold">渠道失败 / 异常</text>
+  <path d="M 620 690 C 560 706 480 706 420 674" fill="none" stroke="#b45309" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#s-amber)"/>
+  <text x="520" y="722" text-anchor="middle" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="11" fill="#b45309" font-weight="bold">每分钟兜底重试（同退款请求号）</text>
+
+  <rect x="850" y="576" width="566" height="128" rx="12" fill="#ffffff" stroke="#c7d2fe" stroke-width="1.4"/>
+  <text x="872" y="602" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="13.5" fill="#4338ca" font-weight="bold">为什么必须「先查后调」</text>
+  <text x="872" y="628" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="12" fill="#475569">发起退款前先问渠道「这笔退款什么状态」，能查到就说明已经发起过</text>
+  <text x="872" y="650" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="12" fill="#475569">退款请求号固定使用退款单号（售后单号 + -R），渠道侧同样幂等</text>
+  <text x="872" y="672" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="12" fill="#475569">查询保留「查询次数 / 最近查询时间 / 最近错误」三个观测字段</text>
+  <text x="872" y="694" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="12" fill="#64748b">重试入口有三个：每分钟兜底任务、管理端 RETRY_REFUND 命令、命令消费失败后的重试</text>
+
+  <!-- ================= 退款成功后 ================= -->
+  <rect x="40" y="752" width="1400" height="146" rx="16" fill="#fff7ed" stroke="#fed7aa" stroke-width="1.5"/>
+  <text x="64" y="782" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="14" fill="#b45309" font-weight="bold">退款成功之后：同一事务收尾 + 两个连带动作</text>
+
+  <rect x="64" y="798" width="430" height="80" rx="10" fill="#ffffff" stroke="#fde68a" stroke-width="1.2"/>
+  <text x="84" y="822" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="12.5" fill="#92400e" font-weight="bold">① 同一事务收尾</text>
+  <text x="84" y="846" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="12" fill="#475569">退款单置成功（记渠道退款流水号与结果）</text>
+  <text x="84" y="868" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="12" fill="#475569">售后单置「已完成」</text>
+
+  <rect x="514" y="798" width="430" height="80" rx="10" fill="#ffffff" stroke="#fde68a" stroke-width="1.2"/>
+  <text x="534" y="822" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="12.5" fill="#92400e" font-weight="bold">② 按规则关闭原订单</text>
+  <text x="534" y="846" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="12" fill="#475569">仅退款：直接关闭原订单</text>
+  <text x="534" y="868" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="12" fill="#475569">退货退款：全部明细被有效售后覆盖才关闭</text>
+
+  <rect x="964" y="798" width="452" height="80" rx="10" fill="#ffffff" stroke="#fde68a" stroke-width="1.2"/>
+  <text x="984" y="822" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="12.5" fill="#92400e" font-weight="bold">③ 会员账务调整（可按业务键补做）</text>
+  <text x="984" y="846" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="12" fill="#475569">业务键 after-sale:售后单号</text>
+  <text x="984" y="868" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="12" fill="#475569">返还抵扣积分 + 冲回购物积分与成长值，按累计退款比例计算</text>
+</svg>

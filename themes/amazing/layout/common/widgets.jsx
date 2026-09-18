@@ -1,0 +1,156 @@
+const createLogger = require('hexo-log');
+const logger = createLogger.default();
+const { Component } = require('inferno');
+const view = require('hexo-component-inferno/lib/core/view');
+const classname = require('hexo-component-inferno/lib/util/classname');
+
+function formatWidgets(widgets) {
+    const result = {};
+    if (Array.isArray(widgets)) {
+        widgets.filter(widget => typeof widget === 'object').forEach(widget => {
+            if ('position' in widget && (widget.position === 'left' || widget.position === 'right')) {
+                if (!(widget.position in result)) {
+                    result[widget.position] = [widget];
+                } else {
+                    result[widget.position].push(widget);
+                }
+            }
+        });
+    }
+    return result;
+}
+
+function clone(Obj){
+    var buf;
+    if(Obj instanceof Array){
+        buf=[];
+        var i=Obj.length;
+        while(i--){
+            buf[i]=clone(Obj[i]);
+        }
+        return buf;
+    }
+    else if(Obj instanceof Object){
+        buf={};
+        for(var k in Obj){
+            buf[k]=clone(Obj[k]);
+        }
+        return buf;
+    }else{
+        return Obj;
+    }
+}
+
+function formatAllWidgets(widgets) {
+    const result = {};
+    if (Array.isArray(widgets)) {
+        widgets.filter(widget => typeof widget === 'object').forEach(widget => {
+            if ('position' in widget && (widget.position === 'left' || widget.position === 'right')) {
+                var widgetNew = clone(widget);
+                // 文章目录需要保留在右栏，其他右栏组件仍合并到左栏以避免文章页信息过载。
+                if(widgetNew.position === 'right' && widgetNew.type !== 'toc'){
+                    widgetNew.position = 'left';
+                }
+                if (!(widgetNew.position in result)) {
+                    result[widgetNew.position] = [widgetNew];
+                } else {
+                    result[widgetNew.position].push(widgetNew);
+                }
+            }
+        });
+    }
+    return result;
+}
+
+function hasColumn(widgets, position) {
+    if (Array.isArray(widgets)) {
+        return typeof widgets.find(widget => widget.position === position) !== 'undefined';
+    }
+    return false;
+}
+
+function getColumnCount(widgets) {
+    return [hasColumn(widgets, 'left'), hasColumn(widgets, 'right')].filter(v => !!v).length + 1;
+}
+
+function getColumnSizeClass(columnCount) {
+    switch (columnCount) {
+        case 2:
+            return 'is-4-tablet is-4-desktop is-4-widescreen';
+        case 3:
+            return 'is-4-tablet is-4-desktop is-3-widescreen';
+    }
+    return '';
+}
+
+function getColumnVisibilityClass(columnCount, position, page, widgets) {
+    // 文章页只保留右侧目录，桌面宽度下无需沿用三栏布局的隐藏规则。
+    const isArticleTocColumn = page.layout === 'post'
+        && position === 'right'
+        && Array.isArray(widgets)
+        && widgets.some(widget => widget.type === 'toc' && widget.position === 'right');
+    if (isArticleTocColumn) {
+        return 'is-hidden-touch';
+    }
+    if (columnCount === 3 && position === 'right') {
+        return 'is-hidden-touch is-hidden-desktop-only';
+    }
+    return '';
+}
+
+function getColumnOrderClass(position) {
+    return position === 'left' ? 'order-1' : 'order-3';
+}
+
+function isColumnSticky(config, position) {
+    return typeof config.sidebar === 'object'
+        && position in config.sidebar
+        && config.sidebar[position].sticky === true;
+}
+
+class Widgets extends Component {
+    render() {
+        const { site, config, helper, page, position } = this.props;
+        const widgets = (page.layout == 'post' || page.layout == 'page') ? formatAllWidgets(config.widgets)[position] || [] : formatWidgets(config.widgets)[position] || [];
+        const columnCount = getColumnCount(config.widgets);
+
+        if (!widgets.length) {
+            return null;
+        }
+
+        return <div class={classname({
+            'column': true,
+            ['column-' + position]: true,
+            [getColumnSizeClass(columnCount)]: true,
+            [getColumnVisibilityClass(columnCount, position, page, config.widgets)]: true,
+            [getColumnOrderClass(position)]: true,
+            'is-sticky': isColumnSticky(config, position)
+        })}>
+            {widgets.map(widget => {
+                // widget type is not defined
+                if (!widget.type) {
+                    return null;
+                }
+                try {
+                    let Widget = view.require('widget/' + widget.type);
+                    Widget = Widget.Cacheable ? Widget.Cacheable : Widget;
+                    return <Widget site={site} helper={helper} config={config} page={page} widget={widget} />;
+                } catch (e) {
+                    logger.w(`Icarus cannot load widget "${widget.type}"`);
+                }
+                return null;
+            })}
+
+            {/*此处放开可以在非桌面设备上并且非文章情况下展示right widget,否则不展示*/}
+            {position === 'left' && hasColumn(config.widgets, 'right') ? <div class={classname({
+                'column-right-shadow': true,
+                'is-hidden-widescreen': true,
+                'is-sticky': isColumnSticky(config, 'right')
+            })}></div> : null}
+        </div>;
+    }
+}
+
+Widgets.getColumnCount = getColumnCount;
+
+module.exports = Widgets;

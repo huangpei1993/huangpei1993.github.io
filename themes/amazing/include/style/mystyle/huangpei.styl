@@ -1,0 +1,318 @@
+/* ---------------------------------
+ *  HuangPei Blog：阅读优先的浅色布局
+ *  参考 Amazing 示例的三栏信息密度，弱化装饰性大图。
+ * --------------------------------- */
+
+blog-accent = #6478d7
+blog-accent-soft = #edf0ff
+blog-background = #f5f6fa
+blog-card = #ffffff
+blog-text = #353b4a
+blog-muted = #8a91a3
+blog-border = #e8eaf2
+
+body:not(.night)
+    background: blog-background
+    color: blog-text
+
+    .navbar-main
+        background: rgba(255, 255, 255, .96)
+        border-top: 2px solid blog-accent
+        box-shadow: 0 2px 12px rgba(46, 58, 100, .06)
+
+        .navbar-item
+            color: #5d6373
+            font-size: .9rem
+            font-weight: 500
+            padding: 1rem .72rem
+            transition: color .18s ease, background-color .18s ease
+
+            &:hover,
+            &.is-active
+                color: blog-accent
+                background: transparent
+
+        .navbar-logo img
+            max-height: 2rem
+
+    .section
+        padding-top: 2.15rem
+        padding-bottom: 3.5rem
+
+    .card
+        background: blog-card
+        border: 1px solid blog-border
+        border-radius: 8px
+        box-shadow: 0 5px 18px rgba(45, 54, 90, .055)
+        transition: border-color .18s ease, box-shadow .18s ease
+
+        &:hover
+            border-color: #dde2f6
+            box-shadow: 0 9px 26px rgba(45, 54, 90, .08)
+
+    .column-main > .card .card-image
+        display: none
+
+    .column-main > .card .card-content
+        padding: 1.6rem 1.7rem
+
+    article.article
+        .article-meta
+            color: blog-muted
+            font-size: .78rem
+            letter-spacing: .01em
+
+        .title
+            color: #303646
+            font-weight: 600
+            letter-spacing: .01em
+
+            a:hover
+                color: blog-accent !important
+
+        .content
+            color: #62697a
+            font-size: 1rem
+            line-height: 1.85
+
+            a
+                color: blog-accent
+
+            blockquote
+                background: #f8f9fd
+                border-left-color: blog-accent
+                box-shadow: none
+
+        .article-more
+            border: 1px solid #d9def4
+            border-radius: 4px
+            color: blog-accent
+            background: #f8f9ff
+
+            &:hover
+                background: blog-accent-soft
+
+    .widget .card-content
+        padding: 1.25rem
+
+    .widget .menu-label
+        color: #8a91a3
+        font-size: .72rem
+        font-weight: 600
+        letter-spacing: .08em
+
+    .widget#toc
+        .toc-title
+            color: #596174
+
+        .toc-scroll .menu-list a:hover,
+        .toc-scroll .menu-list a.is-active
+            color: blog-accent
+
+    .widget[data-type="categories"]
+        .sidebar-category-summary
+            color: #596174
+
+            &:hover
+                background: #f8f9ff
+                color: blog-accent
+
+        .sidebar-category-disclosure[open] .sidebar-category-summary,
+        .sidebar-category-posts a:hover
+            color: blog-accent
+
+        .sidebar-category-posts a
+            color: #697184
+
+    .widget[data-type="profile"]
+        .avatar
+            border: 3px solid #f0f2fb
+            box-shadow: 0 4px 12px rgba(73, 83, 130, .12)
+
+        .title
+            color: #353b4a
+            font-weight: 600
+
+        .heading
+            color: blog-muted
+            font-size: .7rem
+
+        .button.is-primary
+            border: 0
+            background: blog-accent
+            box-shadow: 0 4px 10px rgba(100, 120, 215, .22)
+
+            &:hover
+                background: darken(blog-accent, 7%)
+
+        #hitokoto
+            color: #6f7686
+            font-size: .88rem
+            line-height: 1.7
+
+    .widget .tags .tag:first-child,
+    .index-category-tag .button.is-small
+        color: blog-accent
+        background: blog-accent-soft
+
+    .widget .tags .tag:last-child
+        color: #6e7587
+        background: #f2f3f7
+
+    .pagination .pagination-link,
+    .pagination .pagination-previous,
+    .pagination .pagination-next
+        border: 1px solid blog-border
+        box-shadow: none
+
+    .pagination .pagination-link.is-current
+        border-color: blog-accent
+        background: blog-accent
+
+    .footer
+        background: #fff
+        border-top: 1px solid blog-border
+        color: #858c9d
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+summary:focus-visible
+    outline: 2px solid blog-accent
+    outline-offset: 3px
+
+/* 分类侧栏使用 details/summary，点击分类后可直接展开文章标题。 */
+.sidebar-category-disclosure
+    summary
+        list-style: none
+
+    summary::-webkit-details-marker
+        display: none
+
+    .sidebar-category-summary
+        align-items: center
+        border-radius: 4px
+        cursor: pointer
+        display: flex
+        min-height: 2.2rem
+        padding: .32rem .4rem
+        transition: background-color .18s ease, color .18s ease
+
+    .sidebar-category-caret
+        font-size: .58rem
+        transition: transform .18s ease
+
+    &[open] .sidebar-category-caret
+        transform: rotate(180deg)
+
+    .sidebar-category-posts
+        border-left: 1px solid blog-border
+        list-style: none
+        margin: .08rem 0 .35rem .78rem
+        padding: 0 0 0 .5rem
+
+        li
+            margin: 0
+
+        a
+            display: block
+            font-size: .76rem
+            line-height: 1.65
+            overflow: hidden
+            text-overflow: ellipsis
+            white-space: nowrap
+
+        .sidebar-category-more a
+            font-size: .72rem
+            color: blog-muted
+
+/* 文章目录默认完整展开，方便在阅读时快速定位章节。 */
+.widget#toc
+    .card-content
+        padding: 0
+
+    .toc-title
+        border-radius: 7px 7px 0 0
+        line-height: 1.5
+        margin: 0
+        padding: .8rem 1rem
+
+    .toc-scroll
+        border-top: 1px solid blog-border
+        margin: 0
+        max-height: min(60vh, 31rem)
+        overflow-y: auto
+        padding: .52rem .72rem .8rem
+
+        .menu-list
+            margin: 0
+
+            ul
+                margin-left: .64rem
+
+            a
+                align-items: flex-start
+                border-radius: 4px
+                color: #697184
+                font-size: .78rem
+                line-height: 1.45
+                padding: .34rem .42rem
+                transition: background-color .18s ease, color .18s ease
+                white-space: normal
+
+                &:hover,
+                &.is-active
+                    background: blog-accent-soft
+
+body.night .widget[data-type="categories"] .sidebar-category-summary,
+body.night .widget[data-type="categories"] .sidebar-category-posts a
+    color: #d2d8e3
+
+body.night .sidebar-category-posts
+    border-left-color: #3a4556
+
+body.night .widget[data-type="categories"] .sidebar-category-summary:hover,
+body.night .widget[data-type="categories"] .sidebar-category-disclosure[open] .sidebar-category-summary,
+body.night .widget[data-type="categories"] .sidebar-category-posts a:hover
+    color: #aebcff
+    background: rgba(174, 188, 255, .08)
+
+body.night .widget#toc
+    .toc-title,
+    .toc-scroll .menu-list a
+        color: #d2d8e3
+
+    .toc-scroll
+        border-top-color: #3a4556
+
+        .menu-list a:hover,
+        .menu-list a.is-active
+            background: rgba(174, 188, 255, .08)
+            color: #aebcff
+
+@media screen and (min-width: 1216px)
+    .is-3-column .container
+        max-width: 1440px
+        width: calc(100% - 4rem)
+
+@media screen and (max-width: 768px)
+    /* 文章页右栏在移动端仅作为目录浮层的挂载容器使用。 */
+    .column-right.is-active
+        display: block !important
+
+    body:not(.night)
+        .section
+            padding: 5.65rem 1rem 2rem
+
+        .column-main > .card .card-content
+            padding: 1.3rem
+
+        .navbar-main .navbar-item
+            padding: .9rem .62rem
+
+@media (prefers-reduced-motion: reduce)
+    *, *::before, *::after
+        scroll-behavior: auto !important
+        transition-duration: .01ms !important
+        animation-duration: .01ms !important
+        animation-iteration-count: 1 !important

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="drawio" version="26.0">
+  <diagram id="async-map" name="异步化环节标注">
+    <mxGraphModel dx="1600" dy="1200" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="title" value="端到端链路中的同步主链路、MQ 异步支线与定时兜底" style="text;html=1;align=left;verticalAlign=middle;fontSize=20;fontStyle=1;fontColor=#1f2937;" vertex="1" parent="1">
+          <mxGeometry x="40" y="10" width="900" height="30" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="syncLane" value="同步主链路：用户请求完成的必要路径" style="swimlane;html=1;startSize=30;horizontal=1;collapsible=0;fillColor=#fff4e6;strokeColor=#d79b00;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="30" y="50" width="1500" height="190" as="geometry"/>
+        </mxCell>
+        <mxCell id="syncUser" value="用户/浏览器&#xa;HTTP 请求" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontColor=#333333;" vertex="1" parent="syncLane">
+          <mxGeometry x="30" y="70" width="180" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="syncGateway" value="Gateway&#xa;鉴权 / BFF" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontColor=#333333;" vertex="1" parent="syncLane">
+          <mxGeometry x="270" y="70" width="180" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="syncOrder" value="Order gRPC&#xa;订单状态与交易" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontColor=#333333;" vertex="1" parent="syncLane">
+          <mxGeometry x="510" y="70" width="180" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="syncPayment" value="支付平台&#xa;支付 / 查单 / 退款" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;dashed=1;" vertex="1" parent="syncLane">
+          <mxGeometry x="750" y="70" width="180" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="syncDomain" value="Member / Product / Cart / Promotion&#xa;订单编排中的同步 gRPC" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontColor=#333333;" vertex="1" parent="syncLane">
+          <mxGeometry x="990" y="70" width="250" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="syncBack" value="HTTP 响应&#xa;订单结果 / 卡片 / 物流 / 发票" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontColor=#333333;" vertex="1" parent="syncLane">
+          <mxGeometry x="1300" y="70" width="170" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_sync_1" value="HTTP" style="html=1;endArrow=block;endFill=1;strokeColor=#d79b00;" edge="1" parent="1" source="syncUser" target="syncGateway"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_sync_2" value="gRPC" style="html=1;endArrow=block;endFill=1;strokeColor=#6c8ebf;" edge="1" parent="1" source="syncGateway" target="syncOrder"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_sync_3" value="支付调用" style="html=1;endArrow=block;endFill=1;strokeColor=#666666;" edge="1" parent="1" source="syncOrder" target="syncPayment"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_sync_4" value="域内编排" style="html=1;endArrow=block;endFill=1;strokeColor=#6c8ebf;" edge="1" parent="1" source="syncOrder" target="syncDomain"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_sync_5" value="返回" style="html=1;endArrow=open;dashed=1;strokeColor=#999999;" edge="1" parent="1" source="syncGateway" target="syncBack"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="360" y="180"/><mxPoint x="1380" y="180"/></Array></mxGeometry></mxCell>
+
+        <mxCell id="mqLane" value="MQ 异步支线：提交后解耦非核心动作，消费者按主题与消费组独立处理" style="swimlane;html=1;startSize=30;horizontal=1;collapsible=0;fillColor=#fffdf2;strokeColor=#d6b656;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="30" y="270" width="1500" height="460" as="geometry"/>
+        </mxCell>
+        <mxCell id="mqRow1s" value="Gateway&#xa;认证后首个登录态请求" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="mqLane"><mxGeometry x="30" y="70" width="280" height="55" as="geometry"/></mxCell>
+        <mxCell id="mqRow1t" value="gateway.first-access" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;" vertex="1" parent="mqLane"><mxGeometry x="390" y="70" width="260" height="55" as="geometry"/></mxCell>
+        <mxCell id="mqRow1c" value="Member&#xa;当日首访积分，账本幂等" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="mqLane"><mxGeometry x="730" y="70" width="280" height="55" as="geometry"/></mxCell>
+        <mxCell id="mqRow1n" value="请求不等待积分结果" style="text;html=1;align=left;verticalAlign=middle;fontColor=#7c5b00;fontSize=12;" vertex="1" parent="mqLane"><mxGeometry x="1080" y="80" width="250" height="35" as="geometry"/></mxCell>
+        <mxCell id="mqRow2s" value="Order / Admin&#xa;支付、发货、收货、关单提交后" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="mqLane"><mxGeometry x="30" y="145" width="280" height="55" as="geometry"/></mxCell>
+        <mxCell id="mqRow2t" value="order.status.changed" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;" vertex="1" parent="mqLane"><mxGeometry x="390" y="145" width="260" height="55" as="geometry"/></mxCell>
+        <mxCell id="mqRow2c" value="Member：支付成功结算积分/成长值&#xa;Admin：版本单调更新订单状态" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="mqLane"><mxGeometry x="730" y="145" width="420" height="55" as="geometry"/></mxCell>
+        <mxCell id="mqRow2n" value="不同消费组：member-order-status / admin-order-status" style="text;html=1;align=left;verticalAlign=middle;fontColor=#7c5b00;fontSize=12;" vertex="1" parent="mqLane"><mxGeometry x="1180" y="155" width="290" height="35" as="geometry"/></mxCell>
+        <mxCell id="mqRow3s" value="Order&#xa;下单提交后" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="mqLane"><mxGeometry x="30" y="220" width="280" height="55" as="geometry"/></mxCell>
+        <mxCell id="mqRow3t" value="order.expiration&#xa;DelayedMessage" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;" vertex="1" parent="mqLane"><mxGeometry x="390" y="220" width="260" height="55" as="geometry"/></mxCell>
+        <mxCell id="mqRow3c" value="Order consumer&#xa;超时关单 + 返还积分/释放库存/恢复优惠券" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="mqLane"><mxGeometry x="730" y="220" width="420" height="55" as="geometry"/></mxCell>
+        <mxCell id="mqRow3n" value="状态 / version 条件更新，重复消息安全" style="text;html=1;align=left;verticalAlign=middle;fontColor=#7c5b00;fontSize=12;" vertex="1" parent="mqLane"><mxGeometry x="1180" y="230" width="290" height="35" as="geometry"/></mxCell>
+        <mxCell id="mqRow4s" value="Order scheduler&#xa;发货后扫描" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="mqLane"><mxGeometry x="30" y="295" width="280" height="55" as="geometry"/></mxCell>
+        <mxCell id="mqRow4t" value="order.auto-receipt&#xa;DelayedMessage" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;" vertex="1" parent="mqLane"><mxGeometry x="390" y="295" width="260" height="55" as="geometry"/></mxCell>
+        <mxCell id="mqRow4c" value="Order consumer&#xa;到期自动确认收货，再广播状态变更" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="mqLane"><mxGeometry x="730" y="295" width="420" height="55" as="geometry"/></mxCell>
+        <mxCell id="mqRow4n" value="消费时再次判断是否仍为已发货" style="text;html=1;align=left;verticalAlign=middle;fontColor=#7c5b00;fontSize=12;" vertex="1" parent="mqLane"><mxGeometry x="1180" y="305" width="290" height="35" as="geometry"/></mxCell>
+        <mxCell id="mqRow5s" value="Admin&#xa;售后审核/收货" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="mqLane"><mxGeometry x="30" y="370" width="280" height="55" as="geometry"/></mxCell>
+        <mxCell id="mqRow5t" value="after-sale.command" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;" vertex="1" parent="mqLane"><mxGeometry x="390" y="370" width="260" height="55" as="geometry"/></mxCell>
+        <mxCell id="mqRow5c" value="Order consumer&#xa;APPROVE / REJECT / CONFIRM_RECEIVE / RETRY_REFUND" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="mqLane"><mxGeometry x="730" y="370" width="420" height="55" as="geometry"/></mxCell>
+        <mxCell id="mqRow5n" value="退款与会员账本由订单服务编排" style="text;html=1;align=left;verticalAlign=middle;fontColor=#7c5b00;fontSize=12;" vertex="1" parent="mqLane"><mxGeometry x="1180" y="380" width="290" height="35" as="geometry"/></mxCell>
+        <mxCell id="e_mq_11" value="发布" style="html=1;endArrow=open;dashed=1;strokeColor=#d6b656;" edge="1" parent="1" source="mqRow1s" target="mqRow1t"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_mq_12" value="消费" style="html=1;endArrow=open;dashed=1;strokeColor=#d6b656;" edge="1" parent="1" source="mqRow1t" target="mqRow1c"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_mq_21" value="发布" style="html=1;endArrow=open;dashed=1;strokeColor=#d6b656;" edge="1" parent="1" source="mqRow2s" target="mqRow2t"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_mq_22" value="消费组分流" style="html=1;endArrow=open;dashed=1;strokeColor=#d6b656;" edge="1" parent="1" source="mqRow2t" target="mqRow2c"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_mq_31" value="投递" style="html=1;endArrow=open;dashed=1;strokeColor=#d6b656;" edge="1" parent="1" source="mqRow3s" target="mqRow3t"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_mq_32" value="到期消费" style="html=1;endArrow=open;dashed=1;strokeColor=#d6b656;" edge="1" parent="1" source="mqRow3t" target="mqRow3c"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_mq_41" value="扫描后投递" style="html=1;endArrow=open;dashed=1;strokeColor=#d6b656;" edge="1" parent="1" source="mqRow4s" target="mqRow4t"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_mq_42" value="到期消费" style="html=1;endArrow=open;dashed=1;strokeColor=#d6b656;" edge="1" parent="1" source="mqRow4t" target="mqRow4c"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_mq_51" value="发布" style="html=1;endArrow=open;dashed=1;strokeColor=#d6b656;" edge="1" parent="1" source="mqRow5s" target="mqRow5t"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_mq_52" value="消费" style="html=1;endArrow=open;dashed=1;strokeColor=#d6b656;" edge="1" parent="1" source="mqRow5t" target="mqRow5c"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <mxCell id="timerLane" value="定时任务兜底：不经过 MQ，直接扫描或触发补偿动作" style="swimlane;html=1;startSize=30;horizontal=1;collapsible=0;fillColor=#f7f0ff;strokeColor=#9673a6;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="30" y="760" width="1500" height="260" as="geometry"/>
+        </mxCell>
+        <mxCell id="jobMember" value="Member&#xa;@every 1m" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="timerLane"><mxGeometry x="30" y="70" width="200" height="55" as="geometry"/></mxCell>
+        <mxCell id="jobMemberTask" value="释放过期预占&#xa;清理到期积分" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="timerLane"><mxGeometry x="270" y="70" width="220" height="55" as="geometry"/></mxCell>
+        <mxCell id="jobOrder" value="Order&#xa;@every 1m" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="timerLane"><mxGeometry x="560" y="70" width="200" height="55" as="geometry"/></mxCell>
+        <mxCell id="jobOrderTask" value="扫描待付款订单&#xa;兜底关单与补偿" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="timerLane"><mxGeometry x="800" y="70" width="220" height="55" as="geometry"/></mxCell>
+        <mxCell id="jobAdmin" value="Admin&#xa;每 5 分钟" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="timerLane"><mxGeometry x="1090" y="70" width="200" height="55" as="geometry"/></mxCell>
+        <mxCell id="jobAdminTask" value="同步已发货物流&#xa;更新 delivery_info" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="timerLane"><mxGeometry x="1330" y="70" width="140" height="55" as="geometry"/></mxCell>
+        <mxCell id="jobReceipt" value="Order&#xa;@every 1h" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="timerLane"><mxGeometry x="30" y="145" width="200" height="55" as="geometry"/></mxCell>
+        <mxCell id="jobReceiptTask" value="扫描今日自动收货订单&#xa;投递 order.auto-receipt" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="timerLane"><mxGeometry x="270" y="145" width="320" height="55" as="geometry"/></mxCell>
+        <mxCell id="jobNote" value="延迟消息负责精确到期，定时任务覆盖服务重启、消息投递失败与历史数据窗口。" style="text;html=1;align=left;verticalAlign=middle;fontSize=12;fontColor=#5b436d;" vertex="1" parent="timerLane"><mxGeometry x="650" y="150" width="800" height="40" as="geometry"/></mxCell>
+        <mxCell id="e_job_1" value="直接调用" style="html=1;endArrow=block;endFill=1;strokeColor=#9673a6;" edge="1" parent="1" source="jobMember" target="jobMemberTask"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_job_2" value="直接调用" style="html=1;endArrow=block;endFill=1;strokeColor=#9673a6;" edge="1" parent="1" source="jobOrder" target="jobOrderTask"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_job_3" value="直接调用" style="html=1;endArrow=block;endFill=1;strokeColor=#9673a6;" edge="1" parent="1" source="jobAdmin" target="jobAdminTask"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_job_4" value="投递延迟消息" style="html=1;endArrow=open;dashed=1;strokeColor=#d6b656;" edge="1" parent="1" source="jobReceipt" target="jobReceiptTask"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <mxCell id="legend" value="图例" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="30" y="1050" width="1500" height="90" as="geometry"/></mxCell>
+        <mxCell id="legSync" value="同步 HTTP/gRPC" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="legend"><mxGeometry x="30" y="30" width="180" height="35" as="geometry"/></mxCell>
+        <mxCell id="legMq" value="MQ 主题/消息" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="legend"><mxGeometry x="250" y="30" width="180" height="35" as="geometry"/></mxCell>
+        <mxCell id="legConsumer" value="消费者/落库结果" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="legend"><mxGeometry x="470" y="30" width="180" height="35" as="geometry"/></mxCell>
+        <mxCell id="legJob" value="定时任务/扫描" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="legend"><mxGeometry x="690" y="30" width="180" height="35" as="geometry"/></mxCell>
+        <mxCell id="legText" value="虚线箭头表示异步投递或后台触发；支付平台回调是异步 HTTP，仍会在 Gateway 内同步调用 Order gRPC。" style="text;html=1;align=left;verticalAlign=middle;fontSize=12;fontColor=#444444;" vertex="1" parent="legend"><mxGeometry x="920" y="30" width="520" height="35" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
