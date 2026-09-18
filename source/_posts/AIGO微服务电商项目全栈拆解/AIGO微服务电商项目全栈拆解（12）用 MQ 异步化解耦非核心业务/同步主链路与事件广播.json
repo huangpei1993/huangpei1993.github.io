@@ -1,0 +1,33 @@
+{
+  "title": "同步主链路与事件广播",
+  "participants": [
+    {"id": "user", "label": "用户端", "actor": true},
+    {"id": "gateway", "label": "Gateway"},
+    {"id": "member_rpc", "label": "Member RPC"},
+    {"id": "order_rpc", "label": "Order RPC"},
+    {"id": "mq", "label": "RabbitMQ"},
+    {"id": "member_consumer", "label": "Member 消费者"},
+    {"id": "admin_consumer", "label": "Admin 消费者"},
+    {"id": "admin", "label": "Admin"}
+  ],
+  "messages": [
+    {"from": "user", "to": "gateway", "label": "HTTP：登录 / 浏览 / 下单 / 支付"},
+    {"from": "gateway", "to": "member_rpc", "label": "gRPC：注册、登录、会员数据"},
+    {"from": "member_rpc", "to": "gateway", "label": "会员结果 / Token", "return": true},
+    {"from": "gateway", "to": "order_rpc", "label": "gRPC：下单、支付同步、确认收货"},
+    {"from": "order_rpc", "to": "gateway", "label": "订单号 / 当前状态", "return": true},
+    {"from": "gateway", "to": "user", "label": "HTTP 响应", "return": true},
+    {"note": "请求可以先返回；非核心副作用在后续消息中处理", "over": "gateway"},
+    {"from": "gateway", "to": "mq", "label": "gateway.first-access：首访消息", "async": true},
+    {"from": "mq", "to": "member_consumer", "label": "member-first-access 消费组", "async": true},
+    {"from": "member_consumer", "to": "member_consumer", "label": "AwardDailyLoginPoints：上海自然日业务键幂等"},
+    {"note": "网关当日标记当前用进程内 gcache，非 Redis；会员账本再做业务幂等", "over": "member_consumer"},
+    {"from": "order_rpc", "to": "mq", "label": "order.status.changed：状态已落库后发布", "async": true},
+    {"from": "mq", "to": "member_consumer", "label": "member-order-status 消费组", "async": true},
+    {"from": "member_consumer", "to": "member_consumer", "label": "pay：0→1 才结算积分/成长值；其他状态 Ack"},
+    {"from": "mq", "to": "admin_consumer", "label": "admin-order-status 消费组", "async": true},
+    {"from": "admin_consumer", "to": "admin_consumer", "label": "按 version 单调更新订单投影"},
+    {"from": "admin", "to": "mq", "label": "发货 / 关单提交后发布同一主题", "async": true},
+    {"note": "同一 Topic 不同消费组：Member 与 Admin 各收一份；不是互相抢消息", "over": "mq"}
+  ]
+}

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="drawio" version="26.0">
+  <diagram id="cache-read-path" name="缓存读路径与失效">
+    <mxGraphModel dx="1600" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="title" value="pkg/cache：L1/L2 读路径、回源收敛与失效边界" style="text;html=1;align=left;verticalAlign=middle;fontSize=20;fontStyle=1;fontColor=#1f2937;" vertex="1" parent="1">
+          <mxGeometry x="40" y="12" width="900" height="30" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="readLane" value="读路径与回源：先查进程内 L1，再查 Redis L2，最后按需加载源数据" style="swimlane;html=1;startSize=30;horizontal=1;collapsible=0;fillColor=#eef6ff;strokeColor=#6c8ebf;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="30" y="55" width="1540" height="480" as="geometry"/>
+        </mxCell>
+        <mxCell id="caller" value="业务服务&#xa;Get / List" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontColor=#333333;" vertex="1" parent="readLane">
+          <mxGeometry x="30" y="190" width="170" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="api" value="GetOrLoad&#xa;或 GetOrLoadMany" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontColor=#333333;fontStyle=1;" vertex="1" parent="readLane">
+          <mxGeometry x="260" y="190" width="190" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="l1" value="L1：GoFrame gcache LRU&#xa;进程内原值；默认容量 10,000&#xa;命中不访问 Redis" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontColor=#333333;" vertex="1" parent="readLane">
+          <mxGeometry x="520" y="90" width="230" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="l2" value="L2：Redis&#xa;JSON wireEntry：Found + Value&#xa;读取实际剩余 TTL" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#333333;" vertex="1" parent="readLane">
+          <mxGeometry x="520" y="285" width="230" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="sf" value="singleflight.Group&#xa;同一完整 key 合并并发回源" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontColor=#333333;" vertex="1" parent="readLane">
+          <mxGeometry x="830" y="285" width="220" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="source" value="源数据 Loader&#xa;例如 Product DAO 查询&#xa;返回 value / found / error" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;dashed=1;" vertex="1" parent="readLane">
+          <mxGeometry x="1130" y="285" width="230" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="return" value="返回业务结果&#xa;Hit / NegativeHit / error" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontColor=#333333;" vertex="1" parent="readLane">
+          <mxGeometry x="1280" y="90" width="220" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="ttlNote" value="写 L2 后调用 GetExpire：&#xa;L1 TTL = L2 实际剩余时间 ÷ 2&#xa;避免进程内旧值覆盖较新的 Redis 值" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eaf3ff;strokeColor=#6c8ebf;fontColor=#315a8a;" vertex="1" parent="readLane">
+          <mxGeometry x="30" y="410" width="330" height="75" as="geometry"/>
+        </mxCell>
+        <mxCell id="negativeNote" value="found=false：L2 固定负缓存 10 秒&#xa;L1 仍按实际剩余 TTL 的一半写入&#xa;只返回 NegativeHit，不修改 dst" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff4e6;strokeColor=#d79b00;fontColor=#7c5b00;" vertex="1" parent="readLane">
+          <mxGeometry x="400" y="410" width="350" height="75" as="geometry"/>
+        </mxCell>
+        <mxCell id="l2Hit" value="L2 命中&#xa;反序列化 + 补填 L1&#xa;返回业务结果" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#7c5b00;" vertex="1" parent="readLane">
+          <mxGeometry x="810" y="205" width="230" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="writeback" value="回源成功&#xa;Set L2，再按实际 TTL 填 L1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eaf3ff;strokeColor=#6c8ebf;fontColor=#315a8a;" vertex="1" parent="readLane">
+          <mxGeometry x="1250" y="410" width="250" height="70" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e1" value="调用" style="html=1;endArrow=block;endFill=1;strokeColor=#6c8ebf;" edge="1" parent="1" source="caller" target="api"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e2" value="先查" style="html=1;endArrow=block;endFill=1;strokeColor=#82b366;" edge="1" parent="1" source="api" target="l1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e3" value="L1 Hit：返回" style="html=1;endArrow=block;endFill=1;strokeColor=#82b366;" edge="1" parent="1" source="l1" target="return"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e4" value="Miss" style="html=1;endArrow=block;endFill=1;strokeColor=#d6b656;" edge="1" parent="1" source="l1" target="l2"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e5" value="命中" style="html=1;endArrow=block;endFill=1;strokeColor=#d6b656;" edge="1" parent="1" source="l2" target="l2Hit"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e5b" value="返回" style="html=1;endArrow=block;endFill=1;strokeColor=#d6b656;" edge="1" parent="1" source="l2Hit" target="return"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e6" value="Miss / L2 error" style="html=1;endArrow=block;endFill=1;strokeColor=#9673a6;" edge="1" parent="1" source="l2" target="sf"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e7" value="调用 loader" style="html=1;endArrow=block;endFill=1;strokeColor=#9673a6;" edge="1" parent="1" source="sf" target="source"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e8" value="写缓存" style="html=1;endArrow=block;endFill=1;strokeColor=#6c8ebf;" edge="1" parent="1" source="source" target="writeback"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e9" value="返回" style="html=1;endArrow=open;dashed=1;strokeColor=#999999;" edge="1" parent="1" source="writeback" target="return"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <mxCell id="invalidateLane" value="失效与多实例边界：源数据写成功后显式 Delete；没有 Pub/Sub 时依靠短 L1 TTL 收敛" style="swimlane;html=1;startSize=30;horizontal=1;collapsible=0;fillColor=#fff8f5;strokeColor=#b85450;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="30" y="565" width="1540" height="250" as="geometry"/>
+        </mxCell>
+        <mxCell id="write" value="源数据写入成功&#xa;Product / 其他 bounded domain" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;dashed=1;" vertex="1" parent="invalidateLane">
+          <mxGeometry x="50" y="80" width="260" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="delete" value="Cache.Delete(key...)&#xa;清理 L2 与 L1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontColor=#333333;" vertex="1" parent="invalidateLane">
+          <mxGeometry x="430" y="80" width="240" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="evict" value="Redis L2 删除&#xa;当前进程 L1 删除" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontColor=#333333;" vertex="1" parent="invalidateLane">
+          <mxGeometry x="790" y="80" width="240" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="converge" value="其他实例：&#xa;没有 Pub/Sub，等待各自短 L1 TTL 到期&#xa;再从 Redis 读取最新值" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#7c5b00;" vertex="1" parent="invalidateLane">
+          <mxGeometry x="1140" y="70" width="350" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="e10" value="成功后" style="html=1;endArrow=block;endFill=1;strokeColor=#b85450;" edge="1" parent="1" source="write" target="delete"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e11" value="双层删除" style="html=1;endArrow=block;endFill=1;strokeColor=#b85450;" edge="1" parent="1" source="delete" target="evict"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e12" value="跨实例最终收敛" style="html=1;endArrow=open;dashed=1;strokeColor=#d6b656;" edge="1" parent="1" source="evict" target="converge"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="deleteNote" value="L1 总是尝试清理；若 L2 删除失败，Delete 返回错误，但当前进程 L1 仍会被清掉。" style="text;html=1;align=left;verticalAlign=middle;fontSize=12;fontColor=#7f1d1d;" vertex="1" parent="invalidateLane">
+          <mxGeometry x="50" y="170" width="1000" height="35" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="metricBox" value="指标：请求按 namespace / layer / outcome 计数；loader 时延直方图；singleflight shared 次数" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0f0f0;strokeColor=#666666;fontColor=#444444;" vertex="1" parent="1">
+          <mxGeometry x="30" y="850" width="1540" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="scopeNote" value="事实范围：图中只展示 backend/pkg/cache 当前实现；批量 API 的去重、漏键回源和负缓存详见正文。" style="text;html=1;align=left;verticalAlign=middle;fontSize=12;fontColor=#555555;" vertex="1" parent="1">
+          <mxGeometry x="40" y="935" width="1100" height="25" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

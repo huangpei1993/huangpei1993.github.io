@@ -1,7 +1,7 @@
 ---
 title: AIGO微服务电商项目全栈拆解（02）技术选型与整体分层
 date: 2026-09-15 11:23:44
-categories: Go语言
+categories: AIGO微服务电商项目
 category_order: 2
 tags:
 - 微服务

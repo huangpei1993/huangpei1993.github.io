@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="drawio" version="26.0.0">
+  <diagram name="物流策略" id="delivery-strategy">
+    <mxGraphModel grid="1" gridSize="10" page="1" pageScale="1" pageWidth="1400" pageHeight="900">
+      <root>
+        <mxCell id="0"/><mxCell id="1" parent="0"/>
+        <mxCell id="service" value="Order Service&#xa;UpdateOrderDelivery / GetOrderLogistics" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="50" y="260" width="270" height="90" as="geometry"/></mxCell>
+        <mxCell id="factory" value="NewProvider(code)&#xa;ParseProviderCode(name)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1"><mxGeometry x="430" y="260" width="270" height="90" as="geometry"/></mxCell>
+        <mxCell id="iface" value="DeliveryProvider&#xa;CreateOrder&#xa;CreateOrderByTrackingNo&#xa;SyncDelivery" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="820" y="200" width="300" height="150" as="geometry"/></mxCell>
+        <mxCell id="local" value="localProvider&#xa;可运行模拟&#xa;FNV-1a 单号 + 内存 map&#xa;按时间生成轨迹" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="1190" y="80" width="220" height="130" as="geometry"/></mxCell>
+        <mxCell id="sf" value="sf / 顺丰&#xa;emptyProvider&#xa;ErrNotImplemented" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1"><mxGeometry x="1190" y="240" width="220" height="100" as="geometry"/></mxCell>
+        <mxCell id="zto" value="zto / 中通&#xa;emptyProvider&#xa;ErrNotImplemented" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1"><mxGeometry x="1190" y="370" width="220" height="100" as="geometry"/></mxCell>
+        <mxCell id="jd" value="jd / 京东&#xa;emptyProvider&#xa;ErrNotImplemented" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1"><mxGeometry x="1190" y="500" width="220" height="100" as="geometry"/></mxCell>
+        <mxCell id="orderdb" value="order MySQL&#xa;delivery_company&#xa;delivery_sn&#xa;delivery_info(JSON text)" style="shape=cylinder3;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="430" y="560" width="270" height="120" as="geometry"/></mxCell>
+        <mxCell id="note" value="边界：sf / zto / jd 只有策略入口，当前未接第三方；未知公司名回退 local。local 仅进程内，重启丢失。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#665074;" vertex="1" parent="1"><mxGeometry x="770" y="680" width="640" height="80" as="geometry"/></mxCell>
+        <mxCell id="e1" value="选择策略" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="service" target="factory"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e2" value="返回接口" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="factory" target="iface"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e3" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=1;exitY=0.2;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=block;endFill=1;" edge="1" parent="1" source="iface" target="local"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e4" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=block;endFill=1;" edge="1" parent="1" source="iface" target="sf"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e5" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=1;exitY=0.7;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=block;endFill=1;" edge="1" parent="1" source="iface" target="zto"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e6" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=1;exitY=0.9;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=block;endFill=1;" edge="1" parent="1" source="iface" target="jd"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e7" value="创建 / 同步后保存轨迹" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="service" target="orderdb"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e8" value="读库回退" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;endArrow=open;" edge="1" parent="1" source="orderdb" target="service"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,112 @@
+<mxfile>
+  <diagram id="seqlayout" name="同步主链路与事件广播">
+    <mxGraphModel dx="800" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="user" value="用户端" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;size=40;participant=umlActor;verticalAlign=bottom;spacingBottom=-14;labelBackgroundColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="100" height="1120" as="geometry"/>
+        </mxCell>
+        <mxCell id="gateway" value="Gateway" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;size=40;" vertex="1" parent="1">
+          <mxGeometry x="240" y="40" width="100" height="1120" as="geometry"/>
+        </mxCell>
+        <mxCell id="member_rpc" value="Member RPC" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;size=40;" vertex="1" parent="1">
+          <mxGeometry x="440" y="40" width="100" height="1120" as="geometry"/>
+        </mxCell>
+        <mxCell id="order_rpc" value="Order RPC" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;size=40;" vertex="1" parent="1">
+          <mxGeometry x="640" y="40" width="100" height="1120" as="geometry"/>
+        </mxCell>
+        <mxCell id="mq" value="RabbitMQ" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;size=40;" vertex="1" parent="1">
+          <mxGeometry x="840" y="40" width="100" height="1120" as="geometry"/>
+        </mxCell>
+        <mxCell id="member_consumer" value="Member 消费者" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;size=40;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="40" width="100" height="1120" as="geometry"/>
+        </mxCell>
+        <mxCell id="admin_consumer" value="Admin 消费者" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;size=40;" vertex="1" parent="1">
+          <mxGeometry x="1240" y="40" width="100" height="1120" as="geometry"/>
+        </mxCell>
+        <mxCell id="admin" value="Admin" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;size=40;" vertex="1" parent="1">
+          <mxGeometry x="1440" y="40" width="100" height="1120" as="geometry"/>
+        </mxCell>
+        <mxCell id="act0" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;fillColor=#ffffff;" vertex="1" parent="member_rpc">
+          <mxGeometry x="45" y="140" width="10" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="act1" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;fillColor=#ffffff;" vertex="1" parent="order_rpc">
+          <mxGeometry x="45" y="240" width="10" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="act2" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;fillColor=#ffffff;" vertex="1" parent="gateway">
+          <mxGeometry x="45" y="90" width="10" height="250" as="geometry"/>
+        </mxCell>
+        <mxCell id="act3" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;fillColor=#ffffff;" vertex="1" parent="mq">
+          <mxGeometry x="45" y="450" width="10" height="630" as="geometry"/>
+        </mxCell>
+        <mxCell id="act4" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;fillColor=#ffffff;" vertex="1" parent="member_consumer">
+          <mxGeometry x="45" y="500" width="10" height="580" as="geometry"/>
+        </mxCell>
+        <mxCell id="act5" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;fillColor=#ffffff;" vertex="1" parent="admin_consumer">
+          <mxGeometry x="45" y="850" width="10" height="230" as="geometry"/>
+        </mxCell>
+        <mxCell id="m0" value="HTTP：登录 / 浏览 / 下单 / 支付" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=0.5;exitY=0.0804;entryX=0;entryY=0.0;" edge="1" parent="1" source="user" target="act2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m1" value="gRPC：注册、登录、会员数据" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=1;exitY=0.2;entryX=0;entryY=0.0;" edge="1" parent="1" source="act2" target="act0">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m2" value="会员结果 / Token" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;strokeColor=#999999;fontColor=#999999;exitX=0;exitY=1.0;entryX=1;entryY=0.4;" edge="1" parent="1" source="act0" target="act2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m3" value="gRPC：下单、支付同步、确认收货" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=1;exitY=0.6;entryX=0;entryY=0.0;" edge="1" parent="1" source="act2" target="act1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m4" value="订单号 / 当前状态" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;strokeColor=#999999;fontColor=#999999;exitX=0;exitY=1.0;entryX=1;entryY=0.8;" edge="1" parent="1" source="act1" target="act2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m5" value="HTTP 响应" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;strokeColor=#999999;fontColor=#999999;exitX=0;exitY=1.0;entryX=0.5;entryY=0.3036;" edge="1" parent="1" source="act2" target="user">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="note6" value="请求可以先返回；非核心副作用在后续消息中处理" style="shape=note;whiteSpace=wrap;html=1;size=14;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="310" y="410" width="140" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="m7" value="gateway.first-access：首访消息" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;exitX=0.5;exitY=0.4018;entryX=0;entryY=0.0;" edge="1" parent="1" source="gateway" target="act3">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m8" value="member-first-access 消费组" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;exitX=1;exitY=0.0794;entryX=0;entryY=0.0;" edge="1" parent="1" source="act3" target="act4">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m9" value="AwardDailyLoginPoints：上海自然日业务键幂等" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=1;exitY=0.0862;entryX=1;entryY=0.1379;" edge="1" parent="1" source="act4" target="act4">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="1150" y="590"/><mxPoint x="1150" y="620"/></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="note10" value="网关当日标记当前用进程内 gcache，非 Redis；会员账本再做业务幂等" style="shape=note;whiteSpace=wrap;html=1;size=14;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="1110" y="640" width="140" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="m11" value="order.status.changed：状态已落库后发布" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;exitX=0.5;exitY=0.6071;entryX=0;entryY=0.3651;" edge="1" parent="1" source="order_rpc" target="act3">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m12" value="member-order-status 消费组" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;exitX=1;exitY=0.4444;entryX=0;entryY=0.3966;" edge="1" parent="1" source="act3" target="act4">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m13" value="pay：0→1 才结算积分/成长值；其他状态 Ack" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=1;exitY=0.4828;entryX=1;entryY=0.5345;" edge="1" parent="1" source="act4" target="act4">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="1150" y="820"/><mxPoint x="1150" y="850"/></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m14" value="admin-order-status 消费组" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;exitX=1;exitY=0.6349;entryX=0;entryY=0.0;" edge="1" parent="1" source="act3" target="act5">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="m15" value="按 version 单调更新订单投影" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;exitX=1;exitY=0.2174;entryX=1;entryY=0.3478;" edge="1" parent="1" source="act5" target="act5">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="1350" y="940"/><mxPoint x="1350" y="970"/></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m16" value="发货 / 关单提交后发布同一主题" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;curved=0;rounded=0;exitX=0.5;exitY=0.8661;entryX=1;entryY=0.8254;" edge="1" parent="1" source="admin" target="act3">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="note17" value="同一 Topic 不同消费组：Member 与 Admin 各收一份；不是互相抢消息" style="shape=note;whiteSpace=wrap;html=1;size=14;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="910" y="1040" width="140" height="40" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

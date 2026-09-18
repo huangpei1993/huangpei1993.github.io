@@ -1,7 +1,8 @@
 ---
 title: AIGO微服务电商项目全栈拆解（05）领域业务与流程（下）：订单与交易域
 date: 2026-09-18 09:22:22
-categories: Go语言
+categories: AIGO微服务电商项目
+category_order: 5
 tags:
 - 微服务
 - 电商系统

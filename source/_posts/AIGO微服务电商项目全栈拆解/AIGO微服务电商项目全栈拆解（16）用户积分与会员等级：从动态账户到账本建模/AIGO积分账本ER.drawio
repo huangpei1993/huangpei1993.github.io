@@ -1,0 +1,87 @@
+<mxfile host="app.diagrams.net" modified="2026-09-18T16:25:00.000Z" agent="Codex" version="24.7.17">
+  <diagram id="loyalty-erd" name="积分账本 ER">
+    <mxGraphModel dx="1600" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="title" value="AIGO 用户积分与会员等级 · V2 账本模型" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=24;fontStyle=1;fontColor=#0f172a;" vertex="1" parent="1">
+          <mxGeometry x="40" y="30" width="800" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="subtitle" value="动态账户是当前投影，账本保存可审计事实；批次职责已并入积分账本" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=13;fontColor=#64748b;" vertex="1" parent="1">
+          <mxGeometry x="40" y="70" width="1000" height="30" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="member" value="&lt;b&gt;ums_member&lt;/b&gt;&lt;br&gt;PK id : bigint&lt;br&gt;username / status&lt;br&gt;认证与静态资料&lt;br&gt;&lt;font color='#64748b'&gt;V1 迁移后不再保存积分/成长值&lt;/font&gt;" style="shape=table;html=1;whiteSpace=wrap;rounded=0;fillColor=#f8fafc;strokeColor=#94a3b8;fontColor=#334155;align=left;verticalAlign=top;spacing=12;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="40" y="130" width="260" height="170" as="geometry"/>
+        </mxCell>
+        <mxCell id="account" value="&lt;b&gt;ums_member_account&lt;/b&gt;&lt;br&gt;PK member_id : bigint&lt;br&gt;point_balance : bigint&lt;br&gt;frozen_points : bigint&lt;br&gt;growth : bigint&lt;br&gt;member_level_id : bigint?&lt;br&gt;version : bigint&lt;br&gt;&lt;font color='#0f766e'&gt;当前动态账户投影&lt;/font&gt;" style="shape=table;html=1;whiteSpace=wrap;rounded=0;fillColor=#ecfdf5;strokeColor=#0f766e;fontColor=#134e4a;align=left;verticalAlign=top;spacing=12;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="350" y="120" width="330" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="level" value="&lt;b&gt;ums_member_level&lt;/b&gt;&lt;br&gt;PK id : bigint&lt;br&gt;name : varchar&lt;br&gt;growth_point : bigint&lt;br&gt;权益配置...&lt;br&gt;&lt;font color='#64748b'&gt;按最高 growth_point ≤ growth 匹配&lt;/font&gt;" style="shape=table;html=1;whiteSpace=wrap;rounded=0;fillColor=#eff6ff;strokeColor=#2563eb;fontColor=#1e3a8a;align=left;verticalAlign=top;spacing=12;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="740" y="130" width="270" height="180" as="geometry"/>
+        </mxCell>
+        <mxCell id="outbox" value="&lt;b&gt;oms_member_event_outbox&lt;/b&gt;&lt;br&gt;PK id : bigint&lt;br&gt;UK event_key&lt;br&gt;event_type / order_sn&lt;br&gt;payload : json&lt;br&gt;status / retry_count / next_retry_at&lt;br&gt;&lt;font color='#b45309'&gt;表与生成模型存在；当前发布路径仍直连 MQ&lt;/font&gt;" style="shape=table;html=1;whiteSpace=wrap;rounded=0;fillColor=#fffbeb;strokeColor=#d97706;fontColor=#78350f;align=left;verticalAlign=top;spacing=12;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1080" y="120" width="360" height="220" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="reservation" value="&lt;b&gt;ums_point_reservation&lt;/b&gt;&lt;br&gt;PK id : bigint&lt;br&gt;member_id / order_sn&lt;br&gt;points : bigint&lt;br&gt;status : PENDING / COMMITTED / RELEASED / EXPIRED&lt;br&gt;expires_at&lt;br&gt;&lt;font color='#64748b'&gt;订单积分预占主记录&lt;/font&gt;" style="shape=table;html=1;whiteSpace=wrap;rounded=0;fillColor=#fff7ed;strokeColor=#ea580c;fontColor=#7c2d12;align=left;verticalAlign=top;spacing=12;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="40" y="430" width="330" height="210" as="geometry"/>
+        </mxCell>
+        <mxCell id="ledger" value="&lt;b&gt;ums_point_ledger&lt;/b&gt; · V2&lt;br&gt;PK id : bigint&lt;br&gt;member_id / event_type / entry_type&lt;br&gt;biz_key / points_delta / balance_after&lt;br&gt;remaining_points&lt;br&gt;source_ledger_id&lt;br&gt;event_time / created_at&lt;br&gt;&lt;font color='#0f766e'&gt;GRANT/RETURN 是可消费来源；CONSUME/REVOKE/EXPIRE 指向来源&lt;/font&gt;" style="shape=table;html=1;whiteSpace=wrap;rounded=0;fillColor=#ecfdf5;strokeColor=#059669;fontColor=#064e3b;align=left;verticalAlign=top;spacing=12;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="430" y="420" width="470" height="250" as="geometry"/>
+        </mxCell>
+        <mxCell id="growth" value="&lt;b&gt;ums_growth_ledger&lt;/b&gt;&lt;br&gt;PK id : bigint&lt;br&gt;member_id / event_type&lt;br&gt;biz_key : varchar&lt;br&gt;growth_delta / growth_after&lt;br&gt;order_sn / note&lt;br&gt;&lt;font color='#2563eb'&gt;PAYMENT 增长，REFUND 冲回；经验最低为 0&lt;/font&gt;" style="shape=table;html=1;whiteSpace=wrap;rounded=0;fillColor=#eff6ff;strokeColor=#2563eb;fontColor=#1e3a8a;align=left;verticalAlign=top;spacing=12;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="970" y="430" width="330" height="210" as="geometry"/>
+        </mxCell>
+        <mxCell id="order" value="&lt;b&gt;oms_order&lt;/b&gt;&lt;br&gt;PK id / UK order_sn&lt;br&gt;member_id / status&lt;br&gt;use_integration&lt;br&gt;pay_amount / payment_time&lt;br&gt;&lt;font color='#64748b'&gt;订单服务事实；不直接拥有会员账本&lt;/font&gt;" style="shape=table;html=1;whiteSpace=wrap;rounded=0;fillColor=#f8fafc;strokeColor=#64748b;fontColor=#334155;align=left;verticalAlign=top;spacing=12;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1360" y="420" width="250" height="190" as="geometry"/>
+        </mxCell>
+        <mxCell id="allocation" value="&lt;b&gt;ums_point_reservation_allocation&lt;/b&gt;&lt;br&gt;PK id : bigint&lt;br&gt;reservation_id&lt;br&gt;source_ledger_id&lt;br&gt;points&lt;br&gt;&lt;font color='#ea580c'&gt;V2 不再叫 point_lot_id&lt;/font&gt;" style="shape=table;html=1;whiteSpace=wrap;rounded=0;fillColor=#fff7ed;strokeColor=#ea580c;fontColor=#7c2d12;align=left;verticalAlign=top;spacing=12;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="40" y="750" width="330" height="170" as="geometry"/>
+        </mxCell>
+        <mxCell id="orderitem" value="&lt;b&gt;oms_order_item&lt;/b&gt;&lt;br&gt;PK id : bigint&lt;br&gt;order_sn / product_sku_id&lt;br&gt;product_quantity&lt;br&gt;积分/退款分摊快照&lt;br&gt;&lt;font color='#64748b'&gt;退款 key 可拼接 order_item_id&lt;/font&gt;" style="shape=table;html=1;whiteSpace=wrap;rounded=0;fillColor=#f8fafc;strokeColor=#94a3b8;fontColor=#334155;align=left;verticalAlign=top;spacing=12;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1360" y="700" width="250" height="170" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e_member_account" value="1 : 1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748b;fontColor=#475569;endArrow=ERone;endFill=0;" edge="1" parent="1" source="member" target="account">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_account_level" value="level_id" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563eb;fontColor=#1e3a8a;endArrow=ERone;endFill=0;" edge="1" parent="1" source="account" target="level">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_account_ledger" value="member_id" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#059669;fontColor=#065f46;endArrow=ERmany;endFill=0;" edge="1" parent="1" source="account" target="ledger">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="515" y="380"/><mxPoint x="600" y="380"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e_ledger_self" value="source_ledger_id" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;strokeColor=#059669;fontColor=#065f46;endArrow=ERmany;endFill=0;" edge="1" parent="1" source="ledger" target="ledger">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="900" y="520"/><mxPoint x="920" y="520"/><mxPoint x="920" y="620"/><mxPoint x="900" y="620"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e_account_growth" value="member_id" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563eb;fontColor=#1e3a8a;endArrow=ERmany;endFill=0;" edge="1" parent="1" source="account" target="growth">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="680" y="370"/><mxPoint x="1135" y="370"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e_reservation_allocation" value="reservation_id" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#ea580c;fontColor=#9a3412;endArrow=ERmany;endFill=0;" edge="1" parent="1" source="reservation" target="allocation">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_allocation_ledger" value="source_ledger_id" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#ea580c;fontColor=#9a3412;endArrow=ERone;endFill=0;" edge="1" parent="1" source="allocation" target="ledger">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="370" y="835"/><mxPoint x="400" y="835"/><mxPoint x="400" y="590"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e_outbox_order" value="order_sn" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;strokeColor=#d97706;fontColor=#92400e;endArrow=ERmany;endFill=0;" edge="1" parent="1" source="outbox" target="order">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="1260" y="340"/><mxPoint x="1480" y="340"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e_order_item" value="order_sn" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748b;fontColor=#475569;endArrow=ERmany;endFill=0;" edge="1" parent="1" source="order" target="orderitem">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="legend" value="图例" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#cbd5e1;verticalAlign=top;fontStyle=1;fontColor=#334155;" vertex="1" parent="1">
+          <mxGeometry x="970" y="740" width="330" height="170" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg1" value="" style="rounded=0;html=1;fillColor=#ecfdf5;strokeColor=#0f766e;" vertex="1" parent="legend"><mxGeometry x="15" y="35" width="30" height="18" as="geometry"/></mxCell>
+        <mxCell id="leg1t" value="会员动态账户 / 账本事实" style="text;html=1;align=left;verticalAlign=middle;fontColor=#334155;" vertex="1" parent="legend"><mxGeometry x="60" y="33" width="240" height="22" as="geometry"/></mxCell>
+        <mxCell id="leg2" value="" style="rounded=0;html=1;fillColor=#fff7ed;strokeColor=#ea580c;" vertex="1" parent="legend"><mxGeometry x="15" y="70" width="30" height="18" as="geometry"/></mxCell>
+        <mxCell id="leg2t" value="订单预占及来源分配" style="text;html=1;align=left;verticalAlign=middle;fontColor=#334155;" vertex="1" parent="legend"><mxGeometry x="60" y="68" width="240" height="22" as="geometry"/></mxCell>
+        <mxCell id="leg3" value="" style="rounded=0;html=1;fillColor=#fffbeb;strokeColor=#d97706;" vertex="1" parent="legend"><mxGeometry x="15" y="105" width="30" height="18" as="geometry"/></mxCell>
+        <mxCell id="leg3t" value="订单事件 / Outbox 边界" style="text;html=1;align=left;verticalAlign=middle;fontColor=#334155;" vertex="1" parent="legend"><mxGeometry x="60" y="103" width="240" height="22" as="geometry"/></mxCell>
+        <mxCell id="leg4t" value="实线：当前关系；虚线：来源关系或待演进边界" style="text;html=1;align=left;verticalAlign=middle;fontColor=#64748b;fontSize=11;" vertex="1" parent="legend"><mxGeometry x="15" y="135" width="300" height="22" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

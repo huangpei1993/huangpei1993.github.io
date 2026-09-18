@@ -1,7 +1,8 @@
 ---
 title: AIGO微服务电商项目全栈拆解（06）端到端主链路串联：从请求到消息
 date: 2026-09-18 11:28:40
-categories: Go语言
+categories: AIGO微服务电商项目
+category_order: 6
 tags:
 - 微服务
 - 电商系统

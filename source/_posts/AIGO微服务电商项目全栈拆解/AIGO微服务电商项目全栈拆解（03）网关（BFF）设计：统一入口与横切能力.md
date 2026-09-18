@@ -1,7 +1,8 @@
 ---
 title: AIGO微服务电商项目全栈拆解（03）网关（BFF）设计：统一入口与横切能力
 date: 2026-09-15 15:05:04
-categories: Go语言
+categories: AIGO微服务电商项目
+category_order: 3
 tags:
 - 微服务
 - 电商系统

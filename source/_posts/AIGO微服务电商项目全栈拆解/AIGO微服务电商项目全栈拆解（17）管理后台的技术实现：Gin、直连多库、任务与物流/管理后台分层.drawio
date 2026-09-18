@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="drawio" version="26.0.0">
+  <diagram name="管理后台分层" id="admin-layers">
+    <mxGraphModel grid="1" gridSize="10" page="1" pageScale="1" pageWidth="1600" pageHeight="1000">
+      <root>
+        <mxCell id="0"/><mxCell id="1" parent="0"/>
+        <mxCell id="g1" value="入口与路由" style="swimlane;html=1;startSize=30;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="30" y="30" width="1540" height="110" as="geometry"/></mxCell>
+        <mxCell id="operator" value="运营人员" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="g1"><mxGeometry x="30" y="45" width="170" height="45" as="geometry"/></mxCell>
+        <mxCell id="router" value="Gin Router&#xa;/admin 管理面&#xa;/api 用户侧" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="g1"><mxGeometry x="350" y="40" width="210" height="60" as="geometry"/></mxCell>
+        <mxCell id="middleware" value="Middleware&#xa;Context / AccessLog / CheckLogin" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="g1"><mxGeometry x="720" y="40" width="270" height="60" as="geometry"/></mxCell>
+        <mxCell id="events" value="订单服务等写入方&#xa;发布 order.status.changed" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="g1"><mxGeometry x="1210" y="40" width="280" height="60" as="geometry"/></mxCell>
+        <mxCell id="g2" value="HTTP 业务层" style="swimlane;html=1;startSize=30;fillColor=#eaf3ff;strokeColor=#6c8ebf;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="30" y="180" width="1540" height="160" as="geometry"/></mxCell>
+        <mxCell id="controllers" value="Controller&#xa;绑定参数 / 调用 Service / 统一响应" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="g2"><mxGeometry x="300" y="55" width="260" height="70" as="geometry"/></mxCell>
+        <mxCell id="services" value="Service&#xa;业务编排 / 事务 / 状态校验" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="g2"><mxGeometry x="690" y="55" width="260" height="70" as="geometry"/></mxCell>
+        <mxCell id="mqhandler" value="OrderStatus Consumer&#xa;校验 + 版本单调投影" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="g2"><mxGeometry x="1130" y="55" width="260" height="70" as="geometry"/></mxCell>
+        <mxCell id="g3" value="数据访问与进程内支撑" style="swimlane;html=1;startSize=30;fillColor=#fbf4ff;strokeColor=#9673a6;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="30" y="380" width="1540" height="190" as="geometry"/></mxCell>
+        <mxCell id="repos" value="Repository&#xa;CrudRepo[T] + 领域专用 Repo&#xa;按实例绑定 GORM DB" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="g3"><mxGeometry x="170" y="60" width="270" height="80" as="geometry"/></mxCell>
+        <mxCell id="dao" value="DAO&#xa;表模型 / Table / 细粒度查询" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="g3"><mxGeometry x="570" y="60" width="240" height="80" as="geometry"/></mxCell>
+        <mxCell id="scheduler" value="Scheduler&#xa;秒杀半点填充&#xa;物流启动即执行 + 5 分钟" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="g3"><mxGeometry x="940" y="50" width="270" height="100" as="geometry"/></mxCell>
+        <mxCell id="support" value="DeliveryProvider / Redis / OSS / MinIO" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="g3"><mxGeometry x="1300" y="60" width="200" height="80" as="geometry"/></mxCell>
+        <mxCell id="g4" value="当前配置的 MySQL 实例" style="swimlane;html=1;startSize=30;fillColor=#eef8ed;strokeColor=#82b366;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="30" y="610" width="1540" height="170" as="geometry"/></mxCell>
+        <mxCell id="dbp" value="product&#xa;商品 / SKU / 品牌 / 分类" style="shape=cylinder3;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="g4"><mxGeometry x="50" y="55" width="240" height="80" as="geometry"/></mxCell>
+        <mxCell id="dbc" value="cart&#xa;购物车" style="shape=cylinder3;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="g4"><mxGeometry x="350" y="55" width="190" height="80" as="geometry"/></mxCell>
+        <mxCell id="dbo" value="order&#xa;订单 / 支付 / 售后 / 轨迹" style="shape=cylinder3;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="g4"><mxGeometry x="600" y="55" width="250" height="80" as="geometry"/></mxCell>
+        <mxCell id="dbm" value="member&#xa;会员 / 管理员 / 权限" style="shape=cylinder3;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="g4"><mxGeometry x="910" y="55" width="250" height="80" as="geometry"/></mxCell>
+        <mxCell id="dbpr" value="promotion&#xa;优惠券 / 秒杀 / 运营位" style="shape=cylinder3;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="g4"><mxGeometry x="1220" y="55" width="270" height="80" as="geometry"/></mxCell>
+        <mxCell id="e1" value="HTTP" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="operator" target="router"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e2" value="分组与中间件" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="router" target="middleware"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e3" value="管理请求" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="middleware" target="controllers"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e4" value="业务调用" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="controllers" target="services"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e5" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="services" target="repos"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e6" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="repos" target="dao"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e7" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="dao" target="dbo"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e8" value="订阅" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;endArrow=block;endFill=1;" edge="1" parent="1" source="events" target="mqhandler"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e9" value="更新 order 库" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;endArrow=block;endFill=1;" edge="1" parent="1" source="mqhandler" target="dbo"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e10" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;endArrow=block;endFill=1;" edge="1" parent="1" source="scheduler" target="repos"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e11" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;endArrow=block;endFill=1;" edge="1" parent="1" source="services" target="support"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

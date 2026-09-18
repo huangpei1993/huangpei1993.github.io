@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="drawio" version="26.0.0">
+  <diagram name="调度器职责" id="scheduler-responsibilities">
+    <mxGraphModel grid="1" gridSize="10" page="1" pageScale="1" pageWidth="1500" pageHeight="1000">
+      <root>
+        <mxCell id="0"/><mxCell id="1" parent="0"/>
+        <mxCell id="start" value="startWebServer&#xa;创建 schedulerCtx&#xa;启动两个 goroutine" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="560" y="40" width="360" height="90" as="geometry"/></mxCell>
+        <mxCell id="flash" value="FlashAutoFillScheduler&#xa;每小时半点触发&#xa;目标：上一小时 start_time" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1"><mxGeometry x="80" y="250" width="300" height="100" as="geometry"/></mxCell>
+        <mxCell id="logistics" value="LogisticsSyncScheduler&#xa;启动立即执行&#xa;之后每 5 分钟" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1"><mxGeometry x="1120" y="250" width="300" height="100" as="geometry"/></mxCell>
+        <mxCell id="f1" value="查找启用活动：&#xa;全天整点秒杀" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="40" y="470" width="230" height="80" as="geometry"/></mxCell>
+        <mxCell id="f2" value="删除旧关联与 SKU&#xa;筛选已上架商品" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="300" y="470" width="230" height="80" as="geometry"/></mxCell>
+        <mxCell id="f3" value="库存 ≥ 10&#xa;数量=库存/10&#xa;价格 5~8 折" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="560" y="470" width="230" height="80" as="geometry"/></mxCell>
+        <mxCell id="f4" value="随机 3~5 个商品&#xa;写入 promotion 库" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="820" y="470" width="230" height="80" as="geometry"/></mxCell>
+        <mxCell id="l1" value="查询 order 库&#xa;status=2 且有 delivery_sn" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="1100" y="470" width="230" height="80" as="geometry"/></mxCell>
+        <mxCell id="l2" value="按 company 解析 provider&#xa;SyncDelivery" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="1100" y="610" width="230" height="80" as="geometry"/></mxCell>
+        <mxCell id="l3" value="JSON 序列化轨迹&#xa;更新 delivery_info" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="1100" y="750" width="230" height="80" as="geometry"/></mxCell>
+        <mxCell id="boundary" value="职责边界&#xa;进程内 ticker / timer；未发现分布式锁、选主或统一任务中心。多实例部署可能重复执行，失败项按本轮跳过并记日志。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="390" y="740" width="510" height="110" as="geometry"/></mxCell>
+        <mxCell id="e1" value="启动" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="start" target="flash"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e2" value="启动" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="start" target="logistics"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e3" value="填充步骤" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="flash" target="f1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e4" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="f1" target="f2"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e5" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="f2" target="f3"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e6" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="f3" target="f4"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e7" value="扫描" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="logistics" target="l1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e8" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="l1" target="l2"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e9" value="成功项" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="l2" target="l3"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

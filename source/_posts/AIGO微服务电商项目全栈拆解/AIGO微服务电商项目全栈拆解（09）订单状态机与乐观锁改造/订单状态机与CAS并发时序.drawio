@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="drawio" version="26.0">
+  <diagram name="订单状态机与 CAS 并发时序">
+    <mxGraphModel dx="1600" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="2" value="订单状态机 + CAS 并发时序（当前代码核实；退货边界见橙色说明）" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1;fontSize=18;fillColor=#1f2937;strokeColor=#111827;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="20" y="20" width="1660" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="3" value="读操作计算迁移目标；数据库 CAS 决定谁真正提交。只有真实迁移的请求才能继续执行对应补偿。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e5f6fd;strokeColor=#0e7490;fontColor=#164e63;" vertex="1" parent="1">
+          <mxGeometry x="20" y="85" width="1660" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="10" value="当前 v2 FSM：集中声明的订单状态与事件" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1;fontSize=14;fillColor=#f8fafc;strokeColor=#64748b;" vertex="1" parent="1">
+          <mxGeometry x="20" y="150" width="800" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="11" value="CAS 并发时序：支付与取消同时竞争同一订单" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1;fontSize=14;fillColor=#f8fafc;strokeColor=#64748b;" vertex="1" parent="1">
+          <mxGeometry x="850" y="150" width="830" height="35" as="geometry" />
+        </mxCell>
+
+        <mxCell id="20" value="待付款 (0)" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="75" y="275" width="150" height="62" as="geometry" />
+        </mxCell>
+        <mxCell id="21" value="待发货 (1)&#xa;幂等：pay" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="295" y="275" width="160" height="62" as="geometry" />
+        </mxCell>
+        <mxCell id="22" value="已发货 (2)&#xa;幂等：ship" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="525" y="275" width="160" height="62" as="geometry" />
+        </mxCell>
+        <mxCell id="23" value="已完成 (3)&#xa;幂等：confirm / auto_confirm" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="525" y="425" width="190" height="62" as="geometry" />
+        </mxCell>
+        <mxCell id="24" value="已关闭 (4)&#xa;幂等：cancel / timeout_close" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="285" y="425" width="205" height="62" as="geometry" />
+        </mxCell>
+        <mxCell id="25" value="无效订单 (5)&#xa;无进入事件；终态" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e5e7eb;strokeColor=#6b7280;" vertex="1" parent="1">
+          <mxGeometry x="75" y="425" width="160" height="62" as="geometry" />
+        </mxCell>
+
+        <mxCell id="30" value="pay" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#2563eb;" edge="1" parent="1" source="20" target="21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="31" value="ship / 发货" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#2563eb;" edge="1" parent="1" source="21" target="22">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="32" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#2563eb;" edge="1" parent="1" source="22" target="23">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="33" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#2563eb;" edge="1" parent="1" source="22" target="23">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="34" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#b91c1c;" edge="1" parent="1" source="20" target="24">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="35" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#b91c1c;" edge="1" parent="1" source="20" target="24">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="40" value="合法性与幂等规则：&#xa;• fsm.Event 校验来源状态；非法事件返回错误&#xa;• 同一事件到达精确目标状态时 Changed=false，作为幂等成功&#xa;• 状态 5 没有进入事件&#xa;• 申请退货 request_return 当前不是 FSM 事件，测试明确要求报错" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fillColor=#eef2ff;strokeColor=#6366f1;fontColor=#312e81;" vertex="1" parent="1">
+          <mxGeometry x="75" y="555" width="640" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="41" value="退货恢复原状态：演进边界&#xa;2026-07-30 devlog 曾设计 returning(6) + previous_status 恢复 1/2/3；当前 v2 状态机未实现该事件。2026-08-31 迁移把退货改为独立售后聚合，并移除 returning 与 previous_status 兼容列。" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fillColor=#fff7ed;strokeColor=#f97316;fontColor=#9a3412;" vertex="1" parent="1">
+          <mxGeometry x="75" y="735" width="640" height="155" as="geometry" />
+        </mxCell>
+
+        <mxCell id="50" value="支付查询 / 回调" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="875" y="210" width="150" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="51" value="用户取消" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="1070" y="210" width="150" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="52" value="oms_order&#xa;status + version" style="shape=cylinder3;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="1265" y="210" width="160" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="53" value="库存 / 优惠券补偿" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e8ff;strokeColor=#8b5cf6;" vertex="1" parent="1">
+          <mxGeometry x="1470" y="210" width="165" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="60" value="1. 读取&#xa;status=0, version=v" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eff6ff;strokeColor=#60a5fa;" vertex="1" parent="1">
+          <mxGeometry x="865" y="335" width="170" height="62" as="geometry" />
+        </mxCell>
+        <mxCell id="61" value="2. 读取&#xa;status=0, version=v" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff7ed;strokeColor=#fb923c;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="335" width="170" height="62" as="geometry" />
+        </mxCell>
+        <mxCell id="62" value="3. 支付 CAS&#xa;0 → 1；version=v+1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#2563eb;" vertex="1" parent="1">
+          <mxGeometry x="865" y="465" width="170" height="62" as="geometry" />
+        </mxCell>
+        <mxCell id="63" value="RowsAffected=1&#xa;支付方赢得本次迁移" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#22c55e;" vertex="1" parent="1">
+          <mxGeometry x="1260" y="465" width="175" height="62" as="geometry" />
+        </mxCell>
+        <mxCell id="64" value="4. 取消 CAS&#xa;仍带 status=0, version=v" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffedd5;strokeColor=#ea580c;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="595" width="175" height="62" as="geometry" />
+        </mxCell>
+        <mxCell id="65" value="RowsAffected=0&#xa;重读发现 status=1&#xa;目标 4 不匹配" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fee2e2;strokeColor=#ef4444;" vertex="1" parent="1">
+          <mxGeometry x="1260" y="595" width="175" height="76" as="geometry" />
+        </mxCell>
+        <mxCell id="66" value="5. 返回 CodeOrderStatusVersionConflict&#xa;不执行取消补偿" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fee2e2;strokeColor=#ef4444;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="735" width="250" height="62" as="geometry" />
+        </mxCell>
+        <mxCell id="67" value="只有 changed=true 的取消请求继续：&#xa;释放库存 + 恢复优惠券；幂等重试不重复补偿。&#xa;若取消先 CAS 成功，则支付请求按同一条件失败。" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fillColor=#f3e8ff;strokeColor=#8b5cf6;fontColor=#581c87;" vertex="1" parent="1">
+          <mxGeometry x="1435" y="430" width="210" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="68" value="支付同步边界：支付记录先做 version CAS，再按订单 status/version 条件更新；当前代码对订单 Update 未显式读取 RowsAffected，因此不能夸大为支付/取消全链路已完全收敛。" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fillColor=#fff7ed;strokeColor=#f97316;fontColor=#9a3412;" vertex="1" parent="1">
+          <mxGeometry x="875" y="850" width="760" height="75" as="geometry" />
+        </mxCell>
+
+        <mxCell id="70" value="读取" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;strokeColor=#64748b;" edge="1" parent="1" source="50" target="60">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="71" value="读取" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;strokeColor=#64748b;" edge="1" parent="1" source="51" target="61">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="72" value="读快照" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#2563eb;" edge="1" parent="1" source="60" target="62">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="73" value="CAS" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#2563eb;" edge="1" parent="1" source="62" target="63">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="74" value="读快照" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#ea580c;" edge="1" parent="1" source="61" target="64">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="75" value="CAS" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#ea580c;" edge="1" parent="1" source="64" target="65">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="76" value="reload" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;strokeColor=#ef4444;" edge="1" parent="1" source="65" target="66">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="77" value="仅取消胜者" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;strokeColor=#8b5cf6;" edge="1" parent="1" source="64" target="67">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

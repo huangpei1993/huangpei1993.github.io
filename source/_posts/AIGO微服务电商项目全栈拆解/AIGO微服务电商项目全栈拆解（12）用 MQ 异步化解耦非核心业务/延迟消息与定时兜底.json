@@ -1,0 +1,34 @@
+{
+  "title": "延迟消息与定时兜底",
+  "participants": [
+    {"id": "user", "label": "用户端", "actor": true},
+    {"id": "gateway", "label": "Gateway"},
+    {"id": "order", "label": "Order"},
+    {"id": "timer", "label": "gcron 定时任务"},
+    {"id": "mq", "label": "RabbitMQ"},
+    {"id": "expire", "label": "超时消费者"},
+    {"id": "receipt", "label": "自动收货消费者"},
+    {"id": "admin", "label": "Admin"}
+  ],
+  "messages": [
+    {"from": "user", "to": "gateway", "label": "HTTP：提交订单 / 申请发票"},
+    {"from": "gateway", "to": "order", "label": "gRPC：GenerateOrder / ApplyInvoice"},
+    {"from": "order", "to": "order", "label": "同步事务：订单、库存/积分等核心写入"},
+    {"from": "order", "to": "mq", "label": "order.expiration：待付款延迟消息", "async": true},
+    {"from": "order", "to": "gateway", "label": "返回订单号或发票号", "return": true},
+    {"from": "gateway", "to": "user", "label": "HTTP 响应", "return": true},
+    {"from": "mq", "to": "expire", "label": "到期投递 order.expiration", "async": true},
+    {"from": "expire", "to": "order", "label": "检查仍待付款，状态机/CAS 0→4"},
+    {"from": "expire", "to": "mq", "label": "发布 order.status.changed：timeout_close", "async": true},
+    {"from": "timer", "to": "order", "label": "每 1 分钟扫描待付款，复用关单状态机"},
+    {"from": "timer", "to": "order", "label": "每 1 小时扫描当天应自动收货的已发货订单"},
+    {"from": "order", "to": "mq", "label": "order.auto-receipt：按到期时间发布延迟消息", "async": true},
+    {"from": "mq", "to": "receipt", "label": "到期投递 order.auto-receipt", "async": true},
+    {"from": "receipt", "to": "order", "label": "检查时间/状态，CAS 2→3"},
+    {"from": "receipt", "to": "mq", "label": "发布 order.status.changed：auto_confirm_receipt", "async": true},
+    {"from": "admin", "to": "mq", "label": "售后审核命令：after-sale.command", "async": true},
+    {"from": "mq", "to": "order", "label": "Order 消费 APPROVE / REJECT / CONFIRM_RECEIVE / RETRY_REFUND", "async": true},
+    {"from": "order", "to": "order", "label": "发票邮件类型：事务成功后仅打印模拟邮件日志"},
+    {"from": "order", "to": "gateway", "label": "同步返回：发票已落库；邮件仅有模拟日志", "return": true}
+  ]
+}

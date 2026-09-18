@@ -1,7 +1,8 @@
 ---
 title: AIGO微服务电商项目全栈拆解（04）领域业务与流程（上）：会员、商品、营销、购物车与搜索
 date: 2026-09-15 15:34:34
-categories: Go语言
+categories: AIGO微服务电商项目
+category_order: 4
 tags:
 - 微服务
 - 电商系统

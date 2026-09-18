@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="drawio" version="26.0.0">
+  <diagram id="third-party-wrapper" name="配置选择→工厂策略→具体实现">
+    <mxGraphModel dx="1600" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="title" value="第三方封装的横向总结：配置选择 → 工厂 / 策略 → 具体实现" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=24;fontStyle=1;fontColor=#1f2937;" vertex="1" parent="1">
+          <mxGeometry x="55" y="25" width="1200" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" value="三条源码真实替换链；绿色=已接通，蓝色=模拟默认实现，灰色虚线=占位/空实现" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=13;fontColor=#667085;" vertex="1" parent="1">
+          <mxGeometry x="58" y="70" width="1100" height="25" as="geometry" />
+        </mxCell>
+
+        <mxCell id="lane-mq" value="MQ · backend/pkg/mq" style="swimlane;html=1;rounded=1;startSize=34;horizontal=1;fillColor=#f8fbff;strokeColor=#7aa7d9;fontColor=#1f4e79;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="45" y="120" width="1510" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="lane-pay" value="支付 · order/utility/pay + order_pay.go" style="swimlane;html=1;rounded=1;startSize=34;horizontal=1;fillColor=#fffaf5;strokeColor=#d6a15c;fontColor=#8a4b08;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="45" y="365" width="1510" height="245" as="geometry" />
+        </mxCell>
+        <mxCell id="lane-delivery" value="物流 · admin/internal/delivery" style="swimlane;html=1;rounded=1;startSize=34;horizontal=1;fillColor=#f7fcf8;strokeColor=#7bb58a;fontColor=#24613a;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="45" y="635" width="1510" height="220" as="geometry" />
+        </mxCell>
+
+        <mxCell id="mq-config" value="配置选择&#xa;mq.link = rabbitmq:...&#xa;memory:...（预留）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#5f4b00;fontSize=14;" vertex="1" parent="lane-mq">
+          <mxGeometry x="55" y="80" width="260" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="mq-factory" value="工厂选择&#xa;pkg/mq.GetClient&#xa;按前缀分派，当前仅 rabbitmq" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontColor=#17365d;fontSize=14;" vertex="1" parent="lane-mq">
+          <mxGeometry x="470" y="80" width="300" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="mq-rabbit" value="RabbitMQClient&#xa;RabbitMQ 适配器&#xa;已接通" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontColor=#245b22;fontSize=14;" vertex="1" parent="lane-mq">
+          <mxGeometry x="955" y="50" width="245" height="82" as="geometry" />
+        </mxCell>
+        <mxCell id="mq-memory" value="MemoryClient&#xa;内存实现骨架&#xa;签名未对齐，未接工厂" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=#f5f5f5;strokeColor=#999999;fontColor=#666666;fontSize=14;" vertex="1" parent="lane-mq">
+          <mxGeometry x="1230" y="50" width="245" height="82" as="geometry" />
+        </mxCell>
+        <mxCell id="mq-boundary" value="边界：批量发布也仍有占位实现" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4d6;strokeColor=#d79b00;fontColor=#7f4d00;fontSize=12;" vertex="1" parent="lane-mq">
+          <mxGeometry x="955" y="150" width="520" height="42" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pay-config" value="选择输入&#xa;methodCode&#xa;default / alipay_* / wechat_*" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#5f4b00;fontSize=14;" vertex="1" parent="lane-pay">
+          <mxGeometry x="55" y="90" width="260" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="pay-factory" value="注册表 / 策略选择&#xa;PaymentStrategyRegistry&#xa;GetStrategy(methodCode)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontColor=#17365d;fontSize=14;" vertex="1" parent="lane-pay">
+          <mxGeometry x="470" y="90" width="300" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="pay-default" value="DefaultPaymentStrategy&#xa;本地模拟&#xa;蓝色：可联调，不产生真实扣款" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d9eaf7;strokeColor=#5b9bd5;fontColor=#174a74;fontSize=14;" vertex="1" parent="lane-pay">
+          <mxGeometry x="885" y="60" width="245" height="82" as="geometry" />
+        </mxCell>
+        <mxCell id="pay-alipay" value="AlipayCashier / QR&#xa;支付宝适配器&#xa;显式 AlipayConfig" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontColor=#245b22;fontSize=14;" vertex="1" parent="lane-pay">
+          <mxGeometry x="1155" y="60" width="245" height="82" as="geometry" />
+        </mxCell>
+        <mxCell id="pay-wechat" value="WechatCashier / QR&#xa;方法存在&#xa;返回未实现错误" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=#f5f5f5;strokeColor=#999999;fontColor=#666666;fontSize=14;" vertex="1" parent="lane-pay">
+          <mxGeometry x="885" y="155" width="245" height="82" as="geometry" />
+        </mxCell>
+        <mxCell id="pay-note" value="配置驱动边界：支付宝配置由启动代码读取；支付方式仍由代码注册" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4d6;strokeColor=#d79b00;fontColor=#7f4d00;fontSize=12;" vertex="1" parent="lane-pay">
+          <mxGeometry x="1155" y="155" width="245" height="82" as="geometry" />
+        </mxCell>
+
+        <mxCell id="delivery-config" value="选择输入&#xa;物流公司名 / ProviderCode&#xa;顺丰、 中通、 京东、 local" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#5f4b00;fontSize=14;" vertex="1" parent="lane-delivery">
+          <mxGeometry x="55" y="75" width="260" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="delivery-factory" value="解析 + 工厂&#xa;ParseProviderCode&#xa;NewProvider(code)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontColor=#17365d;fontSize=14;" vertex="1" parent="lane-delivery">
+          <mxGeometry x="470" y="75" width="300" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="delivery-local" value="localProvider&#xa;进程内 map + 轨迹推进&#xa;蓝色：模拟实现" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d9eaf7;strokeColor=#5b9bd5;fontColor=#174a74;fontSize=14;" vertex="1" parent="lane-delivery">
+          <mxGeometry x="955" y="45" width="245" height="82" as="geometry" />
+        </mxCell>
+        <mxCell id="delivery-empty" value="emptyProvider&#xa;SF / ZTO / JD&#xa;ErrNotImplemented" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=#f5f5f5;strokeColor=#999999;fontColor=#666666;fontSize=14;" vertex="1" parent="lane-delivery">
+          <mxGeometry x="1230" y="45" width="245" height="82" as="geometry" />
+        </mxCell>
+        <mxCell id="delivery-note" value="失败边界：后台读取失败时回退已存 delivery_info" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4d6;strokeColor=#d79b00;fontColor=#7f4d00;fontSize=12;" vertex="1" parent="lane-delivery">
+          <mxGeometry x="955" y="145" width="520" height="42" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e-mq-config" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;strokeColor=#6c8ebf;" edge="1" parent="1" source="mq-config" target="mq-factory"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e-mq-rabbit" value="rabbitmq" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;strokeColor=#82b366;fontColor=#245b22;" edge="1" parent="1" source="mq-factory" target="mq-rabbit"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e-mq-memory" value="memory（预留）" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;dashed=1;endArrow=open;strokeColor=#999999;fontColor=#666666;" edge="1" parent="1" source="mq-factory" target="mq-memory"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="900" y="350" /><mxPoint x="1535" y="350" /><mxPoint x="1535" y="160" /><mxPoint x="1397" y="160" /></Array></mxGeometry></mxCell>
+
+        <mxCell id="e-pay-config" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;strokeColor=#6c8ebf;" edge="1" parent="1" source="pay-config" target="pay-factory"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e-pay-default" value="default" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;strokeColor=#5b9bd5;fontColor=#174a74;" edge="1" parent="1" source="pay-factory" target="pay-default"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e-pay-alipay" value="alipay_*" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;strokeColor=#82b366;fontColor=#245b22;" edge="1" parent="1" source="pay-factory" target="pay-alipay"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="900" y="410" /><mxPoint x="1322" y="410" /></Array></mxGeometry></mxCell>
+        <mxCell id="e-pay-wechat" value="wechat_*" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;dashed=1;endArrow=open;strokeColor=#999999;fontColor=#666666;" edge="1" parent="1" source="pay-factory" target="pay-wechat"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+        <mxCell id="e-delivery-config" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;strokeColor=#6c8ebf;" edge="1" parent="1" source="delivery-config" target="delivery-factory"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e-delivery-local" value="local" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;strokeColor=#5b9bd5;fontColor=#174a74;" edge="1" parent="1" source="delivery-factory" target="delivery-local"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e-delivery-empty" value="sf / zto / jd" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;dashed=1;endArrow=open;strokeColor=#999999;fontColor=#666666;" edge="1" parent="1" source="delivery-factory" target="delivery-empty"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="900" y="870" /><mxPoint x="1535" y="870" /><mxPoint x="1535" y="675" /><mxPoint x="1397" y="675" /></Array></mxGeometry></mxCell>
+
+        <mxCell id="method" value="五步法：①按业务语义划接口　②定义稳定选择词汇　③在装配边界用工厂/注册表　④提供可运行的默认实现　⑤用契约测试和能力边界收口" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontColor=#493653;fontSize=15;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="45" y="885" width="1510" height="70" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

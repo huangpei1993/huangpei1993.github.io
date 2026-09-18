@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="drawio" version="26.0">
+  <diagram name="设计模式总览">
+    <mxGraphModel dx="1600" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2" value="AIGO 微服务电商项目&#xa;设计模式全景（源码证据版）" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1;fontSize=22;align=center;verticalAlign=middle;fillColor=#1f2937;strokeColor=#111827;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="480" y="20" width="640" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="3" value="变化点：外部实现、业务规则、对象生命周期与调用入口" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;align=center;verticalAlign=middle;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="560" y="110" width="480" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="4" value="AIGO 源码中的模式协作" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1;fontSize=18;align=center;verticalAlign=middle;fillColor=#e5e7eb;strokeColor=#6b7280;fontColor=#111827;" vertex="1" parent="1">
+          <mxGeometry x="620" y="400" width="360" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="10" value="策略模式&#xa;支付 pay/*&#xa;admin delivery" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1;fontSize=15;align=center;verticalAlign=middle;fillColor=#d5e8d4;strokeColor=#82b366;fontColor=#274e13;" vertex="1" parent="1">
+          <mxGeometry x="60" y="180" width="260" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="11" value="工厂 / 适配选择&#xa;pkg/mq/factory.go&#xa;NewProvider" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1;fontSize=15;align=center;verticalAlign=middle;fillColor=#ffe6cc;strokeColor=#d79b00;fontColor=#7f4f00;" vertex="1" parent="1">
+          <mxGeometry x="60" y="340" width="260" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="12" value="注册表&#xa;支付策略表&#xa;ConditionHandlerRegistry" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1;fontSize=15;align=center;verticalAlign=middle;fillColor=#ffe6cc;strokeColor=#d79b00;fontColor=#7f4f00;" vertex="1" parent="1">
+          <mxGeometry x="60" y="500" width="260" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="13" value="投放责任链&#xa;条件按 sort_order 求值&#xa;不满足即短路" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1;fontSize=15;align=center;verticalAlign=middle;fillColor=#f8cecc;strokeColor=#b85450;fontColor=#7a1f1f;" vertex="1" parent="1">
+          <mxGeometry x="60" y="660" width="260" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="20" value="订单状态机&#xa;looplab/fsm&#xa;pay / cancel / ship / receipt" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1;fontSize=15;align=center;verticalAlign=middle;fillColor=#f8cecc;strokeColor=#b85450;fontColor=#7a1f1f;" vertex="1" parent="1">
+          <mxGeometry x="420" y="180" width="280" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="21" value="模板方法式复用（近似）&#xa;V2 嵌入 V1&#xa;覆盖状态变化步骤" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1;fontSize=15;align=center;verticalAlign=middle;fillColor=#e1d5e7;strokeColor=#9673a6;fontColor=#4c2f5e;" vertex="1" parent="1">
+          <mxGeometry x="420" y="660" width="280" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="30" value="单例 + 懒加载&#xa;sync.Once&#xa;MQ / gRPC / service / local provider" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1;fontSize=15;align=center;verticalAlign=middle;fillColor=#dae8fc;strokeColor=#6c8ebf;fontColor=#1e3a5f;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="180" width="300" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="31" value="支付门面&#xa;PreparePayment&#xa;统一编排查找、调用、转换" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1;fontSize=15;align=center;verticalAlign=middle;fillColor=#e1d5e7;strokeColor=#9673a6;fontColor=#4c2f5e;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="340" width="300" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="32" value="边界提醒&#xa;FSM ≠ CAS&#xa;Once ≠ 分布式单例&#xa;占位 ≠ 厂商接入" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;align=center;verticalAlign=middle;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="500" width="300" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="33" value="组合关系：&#xa;策略 + 注册表 + 门面&#xa;共同组成支付入口" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;align=center;verticalAlign=middle;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="660" width="300" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="40" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#82b366;exitX=1;exitY=0.2;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" edge="1" parent="1" source="10" target="4">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="380" y="100" />
+              <mxPoint x="380" y="380" />
+              <mxPoint x="600" y="380" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="41" value="创建 / 选择" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#d79b00;fontSize=11;exitX=1;exitY=0.5;entryX=0;entryY=0.35;entryDx=0;entryDy=0;" edge="1" parent="1" source="11" target="4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="42" value="按 key 查找" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#d79b00;fontSize=11;exitX=1;exitY=0.5;entryX=0;entryY=0.65;entryDx=0;entryDy=0;" edge="1" parent="1" source="12" target="4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="43" value="逐个求值" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#b85450;fontSize=11;exitX=1;exitY=0.5;entryX=0.25;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="13" target="4">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="380" y="800" />
+              <mxPoint x="740" y="800" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="44" value="状态迁移" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#b85450;fontSize=11;exitX=1;exitY=0.5;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="20" target="4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="45" value="复用流程" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#9673a6;fontSize=11;exitX=1;exitY=0.5;entryX=0.25;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="21" target="4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="46" value="共享对象" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#6c8ebf;fontSize=11;exitX=0;exitY=0.5;entryX=1;entryY=0.25;entryDx=0;entryDy=0;" edge="1" parent="1" source="30" target="4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="47" value="统一入口" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#9673a6;fontSize=11;exitX=0;exitY=0.5;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="31" target="4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="50" value="源码边界" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;align=left;verticalAlign=middle;fillColor=none;strokeColor=none;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="60" y="820" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="51" value="" style="rounded=0;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="180" y="825" width="28" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="52" value="可替换实现" style="text;html=1;align=left;verticalAlign=middle;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="215" y="822" width="100" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="53" value="" style="rounded=0;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="330" y="825" width="28" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="54" value="创建 / 注册" style="text;html=1;align=left;verticalAlign=middle;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="365" y="822" width="100" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="55" value="" style="rounded=0;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="480" y="825" width="28" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="56" value="业务规则" style="text;html=1;align=left;verticalAlign=middle;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="515" y="822" width="100" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="57" value="" style="rounded=0;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="630" y="825" width="28" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="58" value="调用复用" style="text;html=1;align=left;verticalAlign=middle;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="665" y="822" width="100" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="59" value="" style="rounded=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="780" y="825" width="28" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="60" value="生命周期" style="text;html=1;align=left;verticalAlign=middle;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="815" y="822" width="100" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="61" value="证据优先：图中只标记源码已出现的模式或明确的近似用法。" style="text;html=1;align=left;verticalAlign=middle;fontSize=12;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="980" y="820" width="420" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
