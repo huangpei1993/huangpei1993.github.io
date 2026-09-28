@@ -15,19 +15,13 @@ tags:
 
 ## 写在前面
 
-前面的文章已经从架构、领域和端到端链路看过 AIGO 商城。这一篇切到主线 B：不再泛泛讨论“缓存能提高性能”，而是直接拆 `backend/pkg/cache` 这块已经落地的公共组件。
-
-它的定位很明确：在一次 cache-aside 读请求中，先查当前进程的 L1，再查 Redis L2，最后才调用业务 loader。组件同时处理了 TTL、并发回源、空结果、批量漏键、主动失效和指标，但没有把自己包装成一个完整的分布式缓存一致性系统。
-
-本文只以 `pkg/cache/cache.go`、`pkg/cache/README.md`、对应测试，以及 Product V2 和 Promotion 的实际接入代码为依据。尤其需要先说清楚两条边界：Product V2 已经调用了这套组件；Promotion 目前只有初始化占位，而且 namespace 含有组件明确禁止的冒号，当前初始化会失败，不能描述成“营销缓存已经生效”。
+这篇文章我们来讨论基于本地和Redis实现的二级缓存公共组件，它的定位很明确：在一次 cache-aside 读请求中，先查当前进程的 L1，再查 Redis L2，最后才调用业务 loader。组件同时处理了 TTL、并发回源、空结果、批量漏键、主动失效和指标，但没有把自己包装成一个完整的分布式缓存一致性系统。
 
 ## 先看整体读路径
 
 ![缓存读路径、回源与失效](./AIGO微服务电商项目全栈拆解（08）多级缓存设计与实现/缓存读路径与失效.svg)
 
-[缓存读路径与失效.drawio（可编辑源文件）](./AIGO微服务电商项目全栈拆解（08）多级缓存设计与实现/缓存读路径与失效.drawio)
-
-图中只画 `pkg/cache` 已实现的事实：L1 是进程内 GoFrame `gcache` LRU，L2 是 Redis；L1 命中不会访问 Redis；L2 命中会按 Redis 的实际剩余 TTL 补填 L1；两级都未命中时，单键 `GetOrLoad` 通过 `singleflight` 合并回源。源数据写成功后由调用方显式 `Delete`，其他实例没有 Pub/Sub 推送，只能等自己的短 L1 TTL 到期后重新读取 Redis。
+L1 是进程内 GoFrame `gcache` LRU，L2 是 Redis；L1 命中不会访问 Redis；L2 命中会按 Redis 的实际剩余 TTL 补填 L1；两级都未命中时，单键 `GetOrLoad` 通过 `singleflight` 合并回源。源数据写成功后由调用方显式 `Delete`，其他实例没有 Pub/Sub 推送，只能等自己的短 L1 TTL 到期后重新读取 Redis。
 
 ## 一、组件的边界：缓存旁路，而不是缓存即事实
 
@@ -47,7 +41,7 @@ tags:
 namespace:key
 ```
 
-namespace 不能为空，也不能含 `:`；业务 key 会先去掉首尾空格，空 key 直接报错。这个约束不是 Redis 的通用规则，而是该组件自己的 key 拼接约定，因此每个 bounded domain 应使用稳定、互不冲突的 namespace。
+namespace 不能为空；业务 key 会先去掉首尾空格，空 key 直接报错。这个约束不是 Redis 的通用规则，而是该组件自己的 key 拼接约定，因此每个 bounded domain 应使用稳定、互不冲突的 namespace。
 
 `Config` 里的 TTL 没有全局默认值。正缓存每次 `Set` 或 `GetOrLoad` 都必须传入 L2 TTL，L1 的过期时间由组件根据 L2 实际剩余时间计算，而不是再维护一份独立配置。
 
@@ -62,7 +56,7 @@ type wireEntry struct {
 }
 ```
 
-`Found=true` 时才有 `Value`；`Found=false` 表示“源数据确认不存在”，也就是负缓存。L1 中保存的是 `cacheEntry`，正值路径会保留原始 Go 值的引用语义；README 明确要求调用方把从 L1 返回的值当作只读数据，不能在业务代码里原地修改后再假设缓存仍然安全。
+`Found=true` 时才有 `Value`；`Found=false` 表示“源数据确认不存在”，也就是负缓存。L1 中保存的是 `cacheEntry`，正值路径会保留原始 Go 值的引用语义。
 
 从 L2 读取时，组件先反序列化 `wireEntry`，再把 `Value` 反序列化到调用方提供的目标指针，并用解码后的值填充 L1。类型不匹配时会清掉这条 L1，再回到 L2 或 loader，而不是把错误类型继续向业务层传播。
 
@@ -156,13 +150,7 @@ L1：按 L2 实际剩余时间的一半缓存负结果，约 5 秒
 
 ## 六、Delete 失效策略与多实例收敛
 
-组件没有自动监听数据库写入，也没有在 `pkg/cache` 内实现 Pub/Sub。README 给调用方的约定是：源数据写成功后调用 `Delete`。
-
 `Delete(ctx, keys...)` 会构造完整 key，先尝试删除 Redis L2，再清理当前进程 L1。即使 L2 删除失败，代码仍然会执行 L1 删除，并把 L2 错误返回给调用方。因此它不是“删除失败就保留本地缓存”，而是优先降低当前进程继续读旧值的概率，同时把跨实例问题暴露出来。
-
-多实例下的真实边界是：实例 A 调用 Delete，只能直接清掉 A 的 L1 和共享 Redis L2；实例 B 的 L1 不会被远程主动通知。没有 Pub/Sub 时，B 会在自己的短 L1 TTL 到期后再读 Redis，从而最终收敛。若 L2 删除本身失败，旧值还可能继续存在于 Redis，组件并没有在这里提供重试队列或持久化失效日志。
-
-因此写路径应遵循“先提交源数据，成功后 Delete”的顺序；而在当前核对到的 Product V2 代码中，没有看到商品写入流程调用 `utility.Cache.Delete`。这意味着不能进一步推断商品更新已经具备即时缓存失效能力。
 
 ## 七、指标：能看到命中、回源和合并是否发生
 
@@ -174,9 +162,9 @@ L1：按 L2 实际剩余时间的一半缓存负结果，约 5 秒
 | `micro_mall_cache_loader_duration_ms` | 记录单键 loader 和 batch loader 的执行时延，单位为毫秒 |
 | `micro_mall_cache_singleflight_shared_total` | 统计有多少次 `GetOrLoad` 共享了 singleflight 结果 |
 
-这些指标能回答“缓存是否命中”“Redis 是否出错”“loader 是否变慢”“并发 miss 是否被合并”。但当前组件没有在代码中提供命中率计算、自动告警、热 key 淘汰策略或跨实例失效广播；这些能力都不应从现有指标定义外推出来。
+这些指标能回答“缓存是否命中”“Redis 是否出错”“loader 是否变慢”“并发 miss 是否被合并”。但当前组件没有在代码中提供命中率计算、自动告警、热 key 淘汰策略或跨实例失效广播。
 
-## 八、Product V2 的真实接入：商品详情和批量列表
+## 八、Product服务的接入：商品详情和批量列表
 
 ### 1. 单个商品详情
 
@@ -205,23 +193,12 @@ const (
 
 ### 3. Product 的缓存实例配置
 
-`app/product/utility/cache.go` 使用 namespace `product`、L1 容量 10,000，并把 `g.Redis()` 交给 `mmcache.New`。这部分是已实际被 Product V2 调用的实例。
+`app/product/utility/cache.go` 使用 namespace `product`、L1 容量 10,000，并把 `g.Redis()` 交给 `mmcache.New`。这部分是已实际被 Product 调用的实例。
 
-但在本次核对的 Product V2 和相关 utility 文件里没有找到写路径上的 `Delete` 调用，文章只能下结论到“读缓存已经接入”，不能扩展成“商品更新后的缓存失效闭环已经完成”。
+但在本次核对的 Product 和相关 utility 文件里没有找到写路径上的 `Delete` 调用，文章只能下结论到“读缓存已经接入”，不能扩展成“商品更新后的缓存失效闭环已经完成”。
 
-## 九、Promotion 接入的事实边界：初始化占位，不是已生效缓存
 
-`app/promotion/utility/cache.go` 也声明了一个 `*mmcache.Cache`，L1 容量同样是 10,000，但 namespace 写成了：
-
-```go
-Namespace: "micro-mall:promotion",
-```
-
-而 `pkg/cache.newWithStores` 明确拒绝包含 `:` 的 namespace，并返回 `cache: namespace must not contain ':'`。因此当前初始化遇到该值时会直接 return，`utility.Cache` 不会被赋值；同时，在 promotion 目录中也没有检索到 `utility.Cache` 被 `GetOrLoad` 或其他缓存 API 使用。
-
-结论必须写成：Promotion 当前存在缓存初始化代码，但按现有约束它是失败的接入占位，业务缓存读取当前未实现。若后续修正 namespace，还需要继续核对具体业务读写和 Delete 调用，不能仅凭这个 utility 文件宣布营销域已经完成多级缓存接入。
-
-## 十、面试题：从实现细节回答，而不是背概念
+## 九、Q&A
 
 ### Q1：为什么 L1 TTL 取 L2 实际剩余时间的一半？
 
@@ -245,22 +222,9 @@ Namespace: "micro-mall:promotion",
 
 ## 结语：这套缓存真正解决了什么
 
-`pkg/cache` 的价值不在于堆了很多缓存术语，而在于把几条容易散落在业务代码里的规则集中起来：
-
 1. L1 GoFrame LRU 加 L2 Redis，读路径固定为 L1 → L2 → loader；
 2. L1 使用 L2 实际剩余 TTL 的一半，缩短进程内旧值窗口；
 3. 单键回源用 singleflight 合并同进程并发，Redis 故障按可识别错误 fail-open；
 4. not found 用 10 秒负缓存，批量接口先去重、只回源漏键，并继续缓存漏键结果；
 5. Delete 同时清理两层，但多实例只做到没有 Pub/Sub 时的 TTL 收敛；
 6. 指标覆盖请求结果、loader 时延和 singleflight 共享次数。
-
-当前真实落地范围也同样清楚：Product V2 的详情和批量列表已经使用；Promotion 仍是 namespace 不符合约束且没有业务调用的占位；Product 写路径是否调用 Delete 也不能从当前代码中确认。把这些边界写出来，才是对“可复用缓存组件”和“业务缓存闭环”之间差异的准确描述。
-
-## 代码索引
-
-- `backend/pkg/cache/cache.go`
-- `backend/pkg/cache/README.md`
-- `backend/pkg/cache/cache_test.go`
-- `backend/app/product/internal/service/v2/product.go`
-- `backend/app/product/utility/cache.go`
-- `backend/app/promotion/utility/cache.go`

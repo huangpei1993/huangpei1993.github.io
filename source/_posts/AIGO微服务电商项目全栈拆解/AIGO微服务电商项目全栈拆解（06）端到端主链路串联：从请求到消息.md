@@ -14,7 +14,7 @@ tags:
 
 前面几篇文章分别拆过网关、会员、商品、订单和管理端。如果只从单个服务的角度看，系统像是一组相互独立的 CRUD；但用户真正经历的是一条连续链路：注册或登录，浏览商品，加购，下单，支付，等待积分和成长值到账，查看投放卡片，等待发货和物流，确认收货，最后可能进入售后或开票。
 
-这篇文章把这条链路按“请求、RPC、消息、定时任务”重新串起来。重点不是罗列接口，而是回答三个问题：
+这篇文章把这条链路按“请求、RPC、消息、定时任务”重新串起来。本篇文章回答三个问题：
 
 - 哪些动作必须在当前请求中完成，调用方会等待什么结果？
 - 哪些动作在核心数据提交后通过 RabbitMQ 继续传播，消费者如何重试和幂等？
@@ -48,11 +48,7 @@ tags:
 
 ![AIGO 商城端到端主链路时序图](./AIGO微服务电商项目全栈拆解（06）端到端主链路串联：从请求到消息/端到端主链路时序.svg)
 
-可编辑源文件：
-
-[端到端主链路时序.drawio](./AIGO微服务电商项目全栈拆解（06）端到端主链路串联：从请求到消息/端到端主链路时序.drawio)
-
-图中的箭头有意区分了三类动作：浏览器到 Gateway、Gateway 到各业务服务的调用，是当前请求内的同步路径；Order、Member、Admin 之间带主题名的箭头，是提交之后的 MQ 传播；底部的扫描器和调度器，是为延迟消息和进程重启准备的补偿路径。
+图中的箭头分为三类动作：浏览器到 Gateway、Gateway 到各业务服务的调用，是当前请求内的同步路径；Order、Member、Admin 之间带主题名的箭头，是提交之后的 MQ 传播；底部的扫描器和调度器，是为延迟消息和进程重启准备的补偿路径。
 
 ## 一、登录和注册：同步拿到身份，异步记录“当天首次访问”
 
@@ -82,7 +78,7 @@ tags:
                       └─ AwardDailyLoginPoints
 ```
 
-这意味着页面请求不需要等待积分账本写入。Member 的 `first_access.go` 消费者使用固定消费组 `member-first-access`，消息解析失败会 Reject，业务失败会 Retry，成功或幂等跳过才 Ack。实现上使用上海时区解析访问时间，并把当天奖励交给会员服务完成。
+这意味着页面请求不需要等待积分账本写入。Member 的 `first_access.go` 消费者使用固定消费组 `member-first-access`，消息解析失败会 Reject，业务失败会 Retry，成功或幂等跳过才 Ack。解析访问时间后，并把当天奖励交给会员服务完成。
 
 因此文章中不能把“登录返回字段”和“每日登录奖励已落账”混为一件事：登录是同步身份建立，首次认证访问是异步奖励触发；奖励最终是否到账，应以 Member 的积分账本和消费日志为准。
 
@@ -92,7 +88,7 @@ tags:
 
 首页内容和商品信息由 Gateway 的 portal 控制器转发到 Promotion、Product 等客户端。分类、商品详情等页面数据需要在当前 HTTP 响应里返回，所以它们是同步 RPC。搜索和部分聚合接口也遵循同一边界：页面展示需要什么，Gateway 就等待对应服务返回什么。
 
-### 2. 加购直接调用 Cart
+### 2. 加购直接调用 Cart（待优化）
 
 加购和购物车列表分别通过 CartClient 的 `CartAdd`、`ListCart` 等 RPC 完成。加购成功后，用户才能在确认页看到购物车快照。这里没有必要先发一条“加购消息”再等购物车最终一致，因为购物车本身就是用户马上要读取的交互状态。
 
@@ -107,7 +103,7 @@ Gateway 的 `GenerateConfirmOrder` 会调用 OrderClient 生成确认数据，�
 
 真正的提交动作是 `OrderGenerate`：Gateway 把购物车 id、收货地址、优惠券、商品优惠、支付方式、积分抵扣等参数传给 Order。Order 服务随后同步编排 Cart、Product、Member、Coupon，并在自己的数据库事务中写入订单和订单明细。
 
-## 三、提交订单：同步完成资源占用，提交后安排超时关闭
+## 三、提交订单：同步完成资源占用，提交后安排超时关闭（待优化）
 
 Order 的生成过程可以压缩成下面的顺序：
 
@@ -162,23 +158,15 @@ Order 支付状态从 0 → 1 提交成功
 
 Gateway 的 `OrderPay` 也不会接受客户端“我已经支付”的声明。V2 Order 会重新读取支付状态，只有支付记录已经是 SUCCESS 才允许继续，否则返回未支付。这样可以避免把前端按钮、恶意请求或过期页面当成支付事实。
 
-### 3. 订单状态消息的生产边界
-
-Order V2 只在持久化状态确实发生变化后发布状态消息。消息包含订单号、会员 id、旧状态、新状态、事件名、版本、支付现金商品金额和变更时间；消息 id 使用 `${orderSn}:${version}`，key 使用订单号。
-
-对于支付成功，V2 还通过一个 hook 接住 V1 支付回调和支付状态查询导致的 `0 → 1` 迁移，因此无论是支付平台通知还是用户端轮询发现成功，最终都能进入同一条状态事件路径。
-
-这里有一个需要如实说明的可靠性边界：当前实现是“本地提交成功后发布消息”，发布失败会记录 warning，但还没有把状态事件写入持久化 outbox 再由后台重发。也就是说，消费者侧做了重试和幂等，生产侧仍保留消息发布失败窗口；这也是后续可以继续演进的地方。
-
 ## 五、积分、成长值和投放卡片：一个异步，一个同步查询
 
 ### 1. Member 消费支付成功事件
 
 Member 的 `order_status.go` 订阅 `order.status.changed`，消费组为 `member-order-status`。当前已落地的业务重点是支付事件：只有订单从待支付 `0` 变成已支付 `1`，才进入 `SettleOrder`，完成现金商品金额对应的积分、成长值结算，并提交之前预占的积分。
 
-消费逻辑具有三种结果：消息格式或身份不合法时 Reject；暂时性的业务失败 Retry；成功或已处理的重复消息 Ack。结算账本以订单业务键保持幂等，因此同一个支付事件重投不会重复发放。
+结算账本以订单业务键保持幂等，因此同一个支付事件重投不会重复发放。
 
-其他订单状态迁移目前由 Member 消费后直接 Ack，不执行额外副作用，代码中也明确留下了后续拆分各状态业务的 TODO。文章不能把所有订单状态都概括为“Member 都会消费并发奖励”。
+其他订单状态迁移目前由 Member 消费后直接 Ack，不执行额外副作用。
 
 ### 2. 购买后投放卡片是当前请求内的评估
 
@@ -189,13 +177,11 @@ Member 的 `order_status.go` 订阅 `order.status.changed`，消费组为 `membe
 - 积分、成长值是否落账由 Member 异步消费订单状态消息；
 - 投放卡片是用户当前要展示的内容，由 Gateway 同步请求 Promotion 评估。
 
-如果卡片展示需要依赖最终积分余额，应在 Promotion 侧读取已经落账的数据，或明确展示“处理中”状态，不能假设支付 HTTP 响应返回时 MQ 消费已经完成。
-
 ## 六、管理端消费：它不是重新创建订单，而是维护自己的状态投影
 
 管理端启动时订阅 `order.status.changed`，消费组为 `admin-order-status`。它和 Member 使用同一个主题、不同消费组，因此一次订单状态变化可以分别送到会员结算和管理端投影，两者互不抢消息。
 
-Admin 消费者会校验订单号、事件名、from/to 状态、版本、消息 id 和 RabbitMQ message key。收到有效事件后，使用 `WHERE id = ? AND version < event.Version` 的条件更新本地订单状态和版本：
+Admin 消费者会校验订单号、事件名、from/to 状态、版本、消息 id 和 RabbitMQ message key。收到有效事件后，会根据ID和版本号去判断能否更新订单状态和版本：
 
 ```text
 Order 状态提交
@@ -213,7 +199,7 @@ Order 状态提交
 
 ### 1. 发货操作是管理端同步事务
 
-管理员发货时，Admin 校验订单处于允许发货的状态，选择本地、顺丰、申通或京东策略，创建或同步运单信息，在事务内更新物流公司、运单号、发货时间、自动收货天数和操作历史。提交成功后，如果状态发生 `1 → 2`，再发布 `order.status.changed`。
+管理员发货时，Admin 校验订单处于允许发货的状态，选择本地、顺丰、申通或京东等策略，创建或同步运单信息，在事务内更新物流公司、运单号、发货时间、自动收货天数和操作历史。提交成功后，发布 `order.status.changed`。
 
 因此一次发货操作有两个时间点：
 
@@ -224,15 +210,13 @@ Admin 同时订阅和发布同一主题，是因为它既需要接收 Order 的�
 
 ### 2. 物流轨迹由定时任务刷新
 
-管理端的物流同步调度器启动时立即执行，之后每 5 分钟同步已发货订单的物流轨迹。当前本地物流 Provider 是内存实现，会根据订单号生成运单和轨迹节点；进程重启会丢失这部分模拟数据，这是示例实现的明确边界，不应在文章中描述成已经接入真实快递平台。
+管理端的物流同步调度器启动时立即执行，之后每 5 分钟同步已发货订单的物流轨迹。当前本地物流 Provider 是内存实现，会根据订单号生成运单和轨迹节点，进程重启会丢失这部分模拟数据。
 
 ### 3. 确认收货和自动收货
 
-用户主动确认收货时，Gateway 同步调用 Order 的 `ConfirmReceipt`。Order 通过状态机和版本条件把 `2 → 3`，提交后发布状态消息。
+用户主动确认收货时，Gateway 同步调用 Order 的 `ConfirmReceipt`。Order 通过状态机和版本条件修改订单状态，提交后发布状态消息。
 
 如果用户没有主动操作，Order 会为发货订单安排 `order.auto-receipt` 延迟消息。消费者到时间后检查当前时间和订单状态，通过 CAS 完成自动收货；Order 启动的每小时扫描会重新为当天应自动收货的订单安排检查，覆盖进程重启或单次安排失败的情况。
-
-这里的定时任务不是每小时直接批量改状态，而是“扫描并补安排精确延迟检查”；真正状态流转仍由同一套状态机完成。
 
 ## 八、售后和开票：单据创建同步，审核命令和退款执行异步
 
@@ -240,7 +224,7 @@ Admin 同时订阅和发布同一主题，是因为它既需要接收 Order 的�
 
 Gateway 的售后控制器把创建、详情、列表、日志、物流和取消等请求同步转给 Order。创建售后时，Order 会校验原订单状态、支付状态、发货前置条件、售后商品数量和剩余可售后数量，然后在事务中写入售后单、售后明细和退款记录。
 
-买家填写寄回物流后，售后状态同步进入等待卖家收货。这样的动作要立即给用户一个售后单号和当前状态，所以不能把“创建售后单”本身设计成只发消息不落库。
+买家填写寄回物流后，售后状态同步进入等待卖家收货，这样的动作要立即给用户一个售后单号和当前状态。
 
 ### 2. 管理审核通过后通过 `after-sale.command` 推进
 
@@ -260,8 +244,6 @@ Gateway 的售后控制器把创建、详情、列表、日志、物流和取消
 ## 哪些环节已经异步化
 
 ![AIGO 商城异步化环节标注图](./AIGO微服务电商项目全栈拆解（06）端到端主链路串联：从请求到消息/异步化环节标注.svg)
-
-[异步化环节标注.drawio](./AIGO微服务电商项目全栈拆解（06）端到端主链路串联：从请求到消息/异步化环节标注.drawio)
 
 这张图把“异步化”再拆成三层：
 
@@ -295,47 +277,9 @@ Gateway 的售后控制器把创建、详情、列表、日志、物流和取消
 
 ## 这条链路的可靠性设计
 
-把代码串起来后，可以看到系统依赖的不是某个单独的 MQ，而是四个约束共同成立：
+系统依赖的不是某个单独的 MQ，而是四个约束共同成立：
 
 1. **事实先提交**：订单、支付、发货、收货等核心状态先在拥有者服务中提交，消息只传播已经发生的状态变化。
 2. **状态机加版本**：订单取消、支付成功、确认收货、自动收货和管理端投影都使用状态条件或版本条件，只有迁移成功的一方执行后置动作。
 3. **消费者可重试、可幂等**：消息处理失败 Retry，格式错误 Reject；支付结算、管理端投影和退款都允许重复投递而不重复产生业务结果。
 4. **延迟消息加扫描**：消息负责低延迟推进，定时任务负责重启、投递失败和历史脏数据的最终收敛。
-
-同时也要保留实现边界：当前 Order 状态事件生产端还没有完整的持久化 outbox 重发机制；Member 对非支付状态的业务处理尚未全部展开；Admin 的本地物流 Provider 只适合演示和测试。写清楚这些边界，才能区分“代码已经实现的链路”和“架构上可以继续演进的方向”。
-
-## 代码索引：按主链路回看实现
-
-网关入口和同步 RPC：
-
-- `backend/app/gateway/internal/cmd/cmd.go`
-- `backend/app/gateway/internal/middleware/auth.go`
-- `backend/app/gateway/internal/middleware/accesslog.go`
-- `backend/app/gateway/internal/controller/order/order_v1_methods.go`
-- `backend/app/gateway/internal/controller/order/invoice.go`
-- `backend/app/gateway/internal/controller/payment_public/payment.go`
-- `backend/app/gateway/internal/controller/promotion/promotion_v1_methods.go`
-
-会员和订单状态事件：
-
-- `backend/app/member/internal/service/v2/first_access.go`
-- `backend/app/member/internal/service/v2/order_status.go`
-- `backend/app/order/internal/service/v2/order_status_mq.go`
-- `backend/app/order/internal/service/v2/order.go`
-- `backend/app/order/internal/service/v2/order_expiration_mq.go`
-- `backend/app/order/internal/service/v2/order_auto_receipt_mq.go`
-- `backend/app/order/internal/cmd/cmd.go`
-
-售后和管理端消费：
-
-- `backend/app/order/internal/service/v2/after_sale.go`
-- `backend/app/order/internal/service/v2/after_sale_command.go`
-- `micro-mall-admin/backend/internal/service/order_status_mq.go`
-- `micro-mall-admin/backend/internal/service/order.go`
-- `micro-mall-admin/backend/internal/scheduler/logistics_sync.go`
-
-## 结语：用户看到的是一条链路，系统执行的是多条节奏
-
-从用户视角，这是一条从登录到收货、售后和开票的连续旅程；从系统视角，它由同步 RPC、外部支付回调、RabbitMQ 事件、延迟消息和定时扫描共同完成。
-
-最重要的设计取舍是：把必须立即确定的事实留在同步请求中，把可以稍后完成的副作用放到消息里，再用幂等状态机和定时任务保证最终收敛。这样既能让下单和支付接口保持清晰的响应边界，也能让积分、管理端投影、物流、自动收货和退款在独立节奏中扩展。
