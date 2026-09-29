@@ -13,15 +13,11 @@ tags:
 
 真正难的是这件事不能反过来影响支付。投放规则会被运营人员修改，同一订单可能被支付回跳、刷新、重试并发触发，甚至一次评估也可能一张卡都没有命中。因此，购买后投放的核心不是“查几条活动”，而是把它做成一个边界清晰的评估系统：条件可控、求值可解释、结果可重放、并发可收敛、故障可隔离。
 
-本文只按当前代码拆解这条链路，重点核对 `promotion` 的 `delivery/v1`、`condition` 责任链、`service/v1`、`sms_delivery_*` 表、网关路由和 admin 配置服务。
-
 ## 先看全貌：支付主链路与投放支链分离
 
 支付回跳和异步通知进入 gateway 后，调用的是 order 服务的 `SyncPaymentReturn` / `SyncPaymentNotification`，成功后才返回支付平台要求的 ACK。购买后投放没有嵌入这个同步回调，而是由支付成功页在确认支付状态为成功后，另发一次 `GET /api/v1/delivery/{orderSn}`。
 
 ![购买后投放责任链求值图](./AIGO微服务电商项目全栈拆解（15）购买后投放系统：责任链、快照与并发收敛/购买后投放责任链求值图.svg)
-
-[下载 PNG 预览](<./AIGO微服务电商项目全栈拆解（15）购买后投放系统：责任链、快照与并发收敛/购买后投放责任链求值图.png>) · [打开可编辑 draw.io](<./AIGO微服务电商项目全栈拆解（15）购买后投放系统：责任链、快照与并发收敛/购买后投放责任链与快照关系.drawio>)
 
 这条边界很重要：投放服务超时或数据库异常时，支付状态已经由订单服务处理，前端只是不显示推荐卡片。投放是支付成功后的增强体验，不是支付事务的一部分。
 
@@ -98,7 +94,7 @@ sms_delivery_evaluation     订单级评估：order_sn、member_id、评估时�
 sms_delivery_hit            命中卡片：计划版本、展示顺序、卡片字段快照
 ```
 
-写入时，服务在一个事务中先插入 `sms_delivery_evaluation`，再插入本次命中的 `sms_delivery_hit`。即使一张卡都没有命中，也会写 evaluation；表注释已经明确标出“零命中也写入”。这样，空结果也有时间点、有订单号、有评估上下文，不会因为返回 `[]` 而被误认为“从未评估”。
+写入时，服务在一个事务中先插入 `sms_delivery_evaluation`，再插入本次命中的 `sms_delivery_hit`。即使一张卡都没有命中，也会写 evaluation。这样，空结果也有时间点、有订单号、有评估上下文，不会因为返回 `[]` 而被误认为“从未评估”。
 
 ![购买后投放快照关系图](./AIGO微服务电商项目全栈拆解（15）购买后投放系统：责任链、快照与并发收敛/购买后投放快照关系图.svg)
 
@@ -116,11 +112,9 @@ sms_delivery_hit            命中卡片：计划版本、展示顺序、卡片�
 UNIQUE KEY uk_order_sn (order_sn)
 ```
 
-第一次请求负责完成评估事务；并发请求在插入 evaluation 时触发唯一键冲突，然后 `persistEvaluation` 识别 duplicate/unique/1062 错误，重新读取已经提交的 evaluation 和 hits，返回同一份结果。换句话说，应用层的“先读”优化延迟，数据库唯一约束才是最终裁判。
+第一次请求负责完成评估事务；并发请求在插入 evaluation 时触发唯一键冲突，重新读取已经提交的 evaluation 和 hits，返回同一份结果。换句话说，应用层的“先读”优化延迟，数据库唯一约束才是最终裁判。
 
 命中表还有 `UNIQUE KEY uk_eval_campaign (evaluation_id, campaign_id)`，防止同一个评估下重复落同一计划。评估和命中同事务提交，则不会出现“有快照但命中半截”的正常路径。
-
-这套方案的边界也很清楚：重复错误的识别目前是按错误字符串匹配，数据库驱动或错误包装变化时应补充集成测试；不要把它夸大成分布式锁。真正提供并发收敛的是 `uk_order_sn` 和失败后的回读。
 
 ## 6. admin 配置服务：控制面同样需要并发控制
 
@@ -163,5 +157,3 @@ POST /admin/deliveryCampaign/delete/:id
 - `uk_order_sn` 把重复请求收敛到一份已提交结果，事务保证快照与命中记录一起成功或失败。
 - admin 版本号避免配置覆盖，历史快照不随当前配置改动。
 - 网关路由与支付成功页把投放放在支付主链路之外，投放故障不会改变支付结果。
-
-源码核对入口：`backend/app/promotion/internal/logic/delivery/condition.go`、`backend/app/promotion/internal/service/v1/delivery.go`、`backend/app/promotion/manifest/protobuf/delivery/v1/delivery.proto`、`backend/db/migrations/20260808_add_delivery_tables.sql`、`backend/app/gateway/api/promotion/v1/promotion.go`、`backend/app/gateway/internal/controller/promotion/promotion_v1_methods.go`、`micro-mall-admin/backend/internal/service/sms_delivery.go`。

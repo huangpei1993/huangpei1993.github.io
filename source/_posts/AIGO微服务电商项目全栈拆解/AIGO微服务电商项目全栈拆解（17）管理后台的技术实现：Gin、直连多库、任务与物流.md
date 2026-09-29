@@ -16,17 +16,13 @@ tags:
 
 ## 写在前面：后台不是“给数据库套一层页面”
 
-前面的文章已经从业务和链路角度介绍过 B 端管理后台。这一篇把镜头推进到 `micro-mall-admin/backend` 的代码：一次 `/admin/order/update/delivery` 请求，究竟如何从 Gin 路由走到 Service、Repository、DAO 和具体的 MySQL 实例；订单状态消息如何进入后台并按版本收敛；物流策略、秒杀填充和物流同步又分别由谁负责。
-
-本文先读了项目大纲和后台的实现说明，再以源码为准整理。需要特别说明：后台仓库的 `AGENTS.md` 仍把它描述为 Gin + GORM 的服务，`backend/docs/order-status-changed-mq.md` 与 `backend/docs/plan-orderdeliveryService.promt.md` 也明确记录了当前实现和边界。文中“已实现”“可运行模拟”“空实现”“测试替身”会分开写，不把规划项当成生产能力。
+前面的文章已经从业务和链路角度介绍过 B 端管理后台。这一篇文章我们来看看一个后台管理的请求，究竟如何从 Gin 路由走到 Service、Repository、DAO 和具体的 MySQL 实例；订单状态消息如何进入后台并按版本收敛；物流策略、秒杀填充和物流同步又分别由谁负责。
 
 先给结论：**当前管理后台是一个 Gin HTTP 入口，业务逻辑集中在 Service，Repository/DAO 直接操作五个业务 MySQL 实例；订单状态用 RabbitMQ 做跨消费者传播，物流用策略接口包住本地模拟和三家空实现，秒杀与物流由进程内调度器驱动，文件能力则分成 OSS 签名和 MinIO 上传两条路径。**
 
-## 一、先看代码地图：五层不是口号
+## 一、架构分层总览
 
 ![管理后台分层](./AIGO微服务电商项目全栈拆解（17）管理后台的技术实现：Gin、直连多库、任务与物流/管理后台分层.svg)
-
-可编辑源文件：[管理后台分层.drawio](./AIGO微服务电商项目全栈拆解（17）管理后台的技术实现：Gin、直连多库、任务与物流/管理后台分层.drawio)
 
 从目录结构看，后台的主要职责落在下面五层：
 
@@ -37,8 +33,6 @@ tags:
 | Service | `internal/service/` | 业务编排、事务、状态校验、MQ 和外部能力协作 |
 | Repository | `internal/repo/` | 泛型 CRUD、分页、按领域绑定数据库实例 |
 | DAO / DB | `internal/dao/db/`、`internal/dao/db/base.go` | 表模型、表名、细粒度查询和 GORM 连接初始化 |
-
-这里的“分层”不是强制每个模块都经过同一套模板。新业务大多使用 `internal/entity` + `internal/repo/micromallCrudRepos.go` 里的泛型 Repository；旧的 `mallGoodsRepoImpl.go` 仍保留了专用 DAO 组合。两种风格共存，正好能看出项目从手写表访问向泛型 CRUD 收敛的过程。
 
 ## 二、Gin 入口：一棵 `/admin` 路由树
 
@@ -140,8 +134,6 @@ func NewOmsOrderRepo() OmsOrderRepo {
 ### 3.4 DAO 仍然适合少量专用查询
 
 `internal/dao/db/` 中的 DAO 保存表模型和表名，例如 `GoodsDBDao` 负责 `mall_goods` 的创建、更新、删除、按分类查询和按 ID 查询，`AdminDBDao` 负责管理员和角色关联查询。需要多个表一起写时，Service 可以把事务 `*gorm.DB` 传给 DAO。
-
-不过旧 DAO 代码需要按源码审慎阅读。`mallGoodsRepoImpl.go` 中的 `WithDBInstance` 是值接收者，并且示例调用 `self.mallGoodsDao.WithDBInstance(tx)` 没有接住返回值；这意味着不能仅凭函数名就断言后续 DAO 写入一定使用了事务连接。当前主业务 Repository 的 `NewOmsOrderRepo().WithDBInstance(tx)` 会接住返回值，文章把旧的 `MallGoodsRepoImpl` 标为需要回归测试的遗留路径，而不是新的事务模板。
 
 ## 四、直连多库：五个实例，一套进程内连接表
 

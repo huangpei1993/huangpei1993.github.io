@@ -11,23 +11,19 @@ tags:
 - 订单
 ---
 
-前面几篇文章已经分别拆过支付、MQ、订单状态机和购买后投放。把这些代码放在一起看，会发现项目里确实有不少“模式味道”，但它们并不是为了凑齐 GoF 目录而写出来的：有些是为了隔离第三方 SDK，有些是为了让状态迁移可验证，有些只是 GoFrame 生成代码和 Go 并发初始化带来的工程惯用法。
-
-这篇文章只数源码里已经存在的设计，不把普通的 `switch`、一次性的构造函数或“有多个方法的结构体”强行命名为模式。判断标准很简单：它是否稳定地解决了一个重复出现的变化点？调用方是否真的依赖了那个抽象？如果没有，就只把它称为普通实现。
+这篇文章梳理一下项目中用到的设计模式.
 
 ## 一张总览图：模式出现在哪些边界
 
 ![AIGO 微服务电商项目设计模式总览](./AIGO微服务电商项目全栈拆解（13）设计模式全景：从代码里数出用了哪些模式/设计模式总览.png)
 
-可编辑源文件：[设计模式总览.drawio](./AIGO微服务电商项目全栈拆解（13）设计模式全景：从代码里数出用了哪些模式/设计模式总览.drawio)；矢量版：[设计模式总览.svg](./AIGO微服务电商项目全栈拆解（13）设计模式全景：从代码里数出用了哪些模式/设计模式总览.svg)。
-
 图里的颜色只表示模式所处的业务边界：支付和物流是“替换供应商”，订单和投放是“约束业务流转”，公共包与服务初始化是“创建和共享对象”，门面与 V1/V2 是“收敛调用入口”。下面逐个看证据。
 
-## 1. 策略模式：把“怎么支付”和“怎么查物流”隔离开
+## 1. 策略模式：把“怎么支付”、“怎么查物流”隔离开
 
 ### 意图
 
-策略模式把一组可互换的算法或外部实现放在同一个接口后面，让上层按业务键选择策略，而不把第三方细节扩散到订单流程中。这里的变化点不是“支付有很多方法”，而是支付宝、本地模拟支付和未来的微信支付拥有同一组业务动作。
+策略模式把一组可互换的算法或外部实现放在同一个接口后面，让上层按业务键选择策略，而不把第三方细节扩散到订单流程中。这里的变化点不是“支付有很多方法”，而是支付宝、本地模拟支付和微信支付拥有同一组业务动作。
 
 ### 位置一：支付策略
 
@@ -50,7 +46,7 @@ strategy, err := paymentStrategyRegistry.GetStrategy(methodCode)
 rsp, err := strategy.Pay(ctx, req)
 ```
 
-`DefaultPaymentStrategy` 是本地模拟实现，`AlipayCashierStrategy` 和二维码策略封装支付宝 SDK，`WechatCashierStrategy` 目前是明确返回“未实现”的占位实现。调用方只看 `IPayStrategy`，因此支付 SDK、签名验证和参数转换留在策略内部。
+`DefaultPaymentStrategy` 是本地模拟实现，`AlipayCashierStrategy` 和二维码策略封装支付宝 SDK，`WechatCashierStrategy` 和二维码策略封装微信支付策略。调用方只看 `IPayStrategy`，因此支付 SDK、签名验证和参数转换留在策略内部。
 
 ### 位置二：管理后台物流策略
 
@@ -73,11 +69,7 @@ case ProviderSF, ProviderZTO, ProviderJD:
 }
 ```
 
-这里的策略价值很具体：后台服务可以先用确定性的本地轨迹跑通发货、同步和定时推进，接入真实物流时新增实现，不必重写订单服务。边界也很明确：顺丰、中通、京东现在只是占位策略，并不代表已经接入了这些厂商；本地策略的内存数据进程重启会丢失。
-
-### 边界
-
-策略只解决“同一业务动作的多种实现”。支付策略并不负责订单状态落库，物流策略也不负责后台权限、调度和数据库事务。如果把下单、查单、回调、状态推进全部塞进支付策略，接口会变成一个难以测试的“万能对象”。
+这里的策略价值很具体：后台服务可以先用确定性的本地轨迹跑通发货、同步和定时推进，接入真实物流时新增实现，不必重写订单服务。
 
 ## 2. 工厂与注册表：把选择过程集中到一个地方
 
@@ -97,7 +89,7 @@ default:
 }
 ```
 
-`pkg/mq/mq.go` 中的 `Producer`、`Consumer`、`Client` 只暴露项目需要的消息能力，不暴露 RabbitMQ SDK 类型；所以工厂后面可以替换客户端实现，业务服务仍然依赖公共接口。需要注意的是，当前主仓库的工厂已经支持 RabbitMQ，内存实现主要作为同构能力和测试/本地方向存在，不能把注释掉的 `local` 分支描述成生产可切换选项。
+`pkg/mq/mq.go` 中的 `Producer`、`Consumer`、`Client` 只暴露项目需要的消息能力，不暴露 RabbitMQ SDK 类型；所以工厂后面可以替换客户端实现，业务服务仍然依赖公共接口。
 
 ### 2.2 支付策略注册表：注册后按 method code 查找
 
@@ -117,27 +109,6 @@ func (r *PaymentStrategyRegistry) GetStrategy(code string) (pay.IPayStrategy, er
 ```
 
 这部分是“注册表 + 策略”的组合：初始化阶段创建具体策略，运行时只用公开的支付方式编码查找。`PreparePayment` 又对这个过程做了一层统一编排，后面会看到它为什么更像门面。
-
-### 2.3 投放条件注册表：配置驱动的 handler 工厂
-
-源码位置：`micro-mall/backend/app/promotion/internal/logic/delivery/condition.go`。
-
-`ConditionHandler` 约定 `Type`、`Validate` 和 `Match`；`NewConditionHandlerRegistry` 把订单金额、商品、数量、收货地区、会员等级等内置 handler 注册到 map 中。投放服务读取数据库里的 `ConditionType` 后，只调用 `registry.Get`：
-
-```go
-handler := s.registry.Get(cond.ConditionType)
-if handler == nil {
-    matched = false
-    break
-}
-ok, err := handler.Match(ctx, config, dctx)
-```
-
-它的意图不是“把每条 if 搬到 map 里”，而是让运营配置的条件类型和实际求值代码之间有一个白名单边界：未知类型不执行，配置 JSON 先解析，再由 handler 自己校验和匹配。
-
-### 边界
-
-注册表降低了调用方对具体类型的依赖，但也带来了初始化顺序、重复注册和并发访问的责任。当前投放注册表是每个 `DeliveryService` 实例构造一份内置集合，支付注册表是包级共享 map；两者的生命周期和线程安全假设不同，不应抽象成一个“万能 Registry 框架”。
 
 ## 3. 状态机：订单状态不是一串散落的 if
 
@@ -161,7 +132,7 @@ machine := fsm.NewFSM(orderStateName(current), orderEventDescriptions, callbacks
 err := machine.Event(ctx, string(event), orderSn)
 ```
 
-项目还显式声明了一些幂等迁移，例如已支付订单再次 `pay` 仍停留在待发货，已关闭订单再次关闭仍停留在已关闭。`transitionOrderStatus` 把库里的状态码转换为 FSM 状态名，再把结果转换回 `OrderStatus`，并返回 `Changed` 供持久化层判断是否真的发生状态变化。
+项目还声明了一些幂等迁移，例如已支付订单再次 `pay` 仍停留在待发货，已关闭订单再次关闭仍停留在已关闭。`transitionOrderStatus` 把库里的状态码转换为 FSM 状态名，再把结果转换回 `OrderStatus`，并返回 `Changed` 供持久化层判断是否真的发生状态变化。
 
 ### 边界
 
@@ -199,7 +170,7 @@ for _, cond := range conditions {
 
 这里是“显式循环驱动的责任链”，不是每个 handler 持有 `next` 指针的经典对象链。称为责任链是因为请求依次经过一组独立处理者并允许中止；如果未来要支持 OR、嵌套括号或复杂布尔表达式，单纯增加 handler 不够，应该升级为规则树或表达式求值器。
 
-## 5. 单例 + 懒加载：共享连接和服务实例，但要看失败语义
+## 5. 单例 + 懒加载：共享连接和服务实例
 
 ### 意图
 
@@ -211,7 +182,7 @@ for _, cond := range conditions {
 - `micro-mall/backend/app/gateway/utility/grpc_conns.go`：每个下游连接有一个 `sync.Once`，首次取用时建立连接和 client。
 - `micro-mall/backend/app/order/internal/service/v2/order.go`：`orderServiceOnce` 只创建一个嵌入 V1 的 V2 订单服务。
 - `micro-mall-admin/backend/internal/delivery/delivery.go`：`defaultLocalOnce` 共享本地物流提供商；`localProvider` 内部维护内存物流单和清理 goroutine。
-- GoFrame 生成的 DAO 全局对象和若干 `NewXxxService` 的共享实例，也体现了“包级入口 + 进程内复用”的习惯，但它们不都由本文项目手写 `sync.Once` 实现。
+- GoFrame 生成的 DAO 全局对象和 `NewXxxService` 的共享实例，也体现了“包级入口 + 进程内复用”。
 
 代表性的 MQ 摘要：
 
@@ -231,12 +202,6 @@ func GetMQClient() commonMQ.Client {
     return mqClient
 }
 ```
-
-### 一个必须说明的边界：`sync.Once` 不是万能重试器
-
-`sync.Once` 的语义是函数最多执行一次。网关 MQ 代码在初始化失败时不写入 client，因此调用方看到的是 `nil`；但 `Once` 本身仍不会再次执行初始化函数。文章不能把它描述为“失败后每次调用都会重试”。如果业务需要失败重试，应使用显式状态、带退避的初始化器或可重置的生命周期管理。
-
-同样，单例只限制一个进程内的实例数，不等于分布式单例；部署多个服务副本时，每个副本都有自己的连接和内存状态。
 
 ## 6. 模板方法式复用：V2 嵌入 V1，改少数变化步骤
 
@@ -302,7 +267,7 @@ func PreparePayment(ctx context.Context, orderSn string, amount float64, code st
 
 门面没有替代策略，也没有把支付宝 SDK 暴露给网关；它只是把“支付用例”的固定编排收拢起来。`PaymentStrategyRegistry` 仍是选择对象的注册表，`IPayStrategy` 仍是可替换策略，三个角色各自有边界。
 
-## 8. 总表：哪些是确定模式，哪些只是近似
+## 8. 总表
 
 | 模式 | 真实位置 | 解决的变化点 | 不能过度解读 |
 | --- | --- | --- | --- |
