@@ -6,7 +6,7 @@ tags:
     - 高并发系统
     - Spring Cloud
     - Gateway
-    - Sentinuel
+    - Sentinel
 references:
     - https://blog.csdn.net/csdn122345/article/details/156519494
 ---
