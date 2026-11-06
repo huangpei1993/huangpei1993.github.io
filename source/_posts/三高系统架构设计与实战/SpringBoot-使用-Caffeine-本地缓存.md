@@ -1,7 +1,7 @@
 ---
 title: SpringBoot 使用 Caffeine 本地缓存
 date: 2026-10-30 16:26:57
-catagories: 高并发系统
+categories: 高并发系统
 tags:
     - Caffeine
     - 缓存
