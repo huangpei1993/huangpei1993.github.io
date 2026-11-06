@@ -1,7 +1,7 @@
 ---
 title: Spring Cloud Gateway 与 Sentinel 集成
 date: 2026-10-24 12:10:34
-catagories: 高并发系统
+categories: 高并发系统
 tags:
     - 高并发系统
     - Spring Cloud

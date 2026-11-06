@@ -1,7 +1,10 @@
 ---
 title: Seata 分布式事务：原理、四种模式与 Spring Cloud 实战
 date: 2026-10-31 09:18:43
+categories: 高并发系统
 tags:
+    - Seata
+    - 分布式事务
 ---
 
 Seata（Simple Extensible Autonomous Transaction Architecture）是一个开源的分布式事务框架，主要用于解决微服务架构下，多个服务、多个数据库之间的数据一致性问题。
